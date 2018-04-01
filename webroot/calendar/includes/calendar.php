@@ -161,7 +161,6 @@ function verify_user($user, $password)
         global $calendar_name, $db;
 
         $passwd = md5($password);
-    echo ($password . "   " . $passwd);
 	$query= "SELECT ".SQL_PREFIX."users.id as id, displayname, username, permission, group_id, ".SQL_PREFIX."grouptypes.type as type  FROM ".SQL_PREFIX."users\n"
 				." INNER JOIN ".SQL_PREFIX."groups ON ".SQL_PREFIX."groups.id=".SQL_PREFIX."users.group_id \n"
 				." INNER JOIN ".SQL_PREFIX."grouptypes ON ".SQL_PREFIX."groups.type=".SQL_PREFIX."grouptypes.id \n"
