@@ -1,0 +1,27 @@
+
+
+Basic Calendar Install
+
+1) Create a database and run the database.sql script.
+2) Rename the files admin/cake13/app/config/bootstrap.php and admin/cake13/app/config/database.php
+3) Edit values in the files: admin/cake13/app/config/bootstrap.php and admin/cake13/app/config/database.php
+	Set the database credentials
+	USER-HOME should be a the absolute path to a directory that is password protected or not web accessible.
+	User invoices will be stored here and are served with a file wrapper from this folder.
+	You will need to get an API Key from google to get the google maps to work.
+4) In the app folder create the following directories. These will need to be writable:
+	calendar/admin/cake13/app/tmp
+	calendar/admin/cake13/app/tmp/cache
+	calendar/admin/cake13/app/tmp/cache/models
+	calendar/admin/cake13/app/tmp/cache/persistent	
+	calendar/admin/cake13/app/tmp/logs	
+	USER-HOME/invoicables
+	calendar/admin/logs
+5) Edit the files in /custom to customize the calendar
+6) Upload everything to your website. At the time of writing this document it was necessary that the calendar files be in a folder called "calendar" on the website.
+6) You should be able to log into the calendar using: admin, Marou123
+7) In the admin section you should be able to create some locations, cars and assign the cars to the locations.
+
+
+
+
