@@ -1,5 +1,0 @@
-language: php
-notifications:
-  email:false
-branches:
-  only: master
