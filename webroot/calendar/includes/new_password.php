@@ -55,7 +55,7 @@ function generatePassword ($length = 6)
 
 function new_password()
 {
-	global $vars, $day, $month, $year, $phpc_script, $db, $noNavbar;
+	global $vars, $day, $month, $year, $phpc_script, $db, $noNavbar, $ORGANIZATION_NAME, $ADMIN_EMAIL;
 	$noNavbar = true;
 
 	$html = tag('div');
@@ -64,7 +64,7 @@ function new_password()
 	if(isset($vars['username'])){
 		$user = $vars['username'];
 	
-		$email = quick_query("select email from ".SQL_PREFIX."users where username=" . $db->qstr($user) . "", "email");
+		$email = quick_query("select email from ".SQL_PREFIX."users where username=" . $db->qstr($user), "email");
 		if (strlen($email) < 3){
 			$html->add(tag("center",tag("h2", "Invalid username")));
 		} else {
@@ -79,12 +79,12 @@ function new_password()
 			}
 				
 			$mailText = "Your new password is:<br/><br/><b>$newPassword</b><br/><br/><a href='http://www.nelsoncar.com/members/calendar/nelson.php?action=my_account'>Login and change your password.</a>";
-			$headers = 'From: Nelson Carshare <info@nelsoncar.com>' . "\r\n" .
-			    'Reply-To: Nelson Carshare <info@nelsoncar.com>' . "\r\n" . 
+			$headers = 'From: ' . $ORGANIZATION_NAME .' <' . $ADMIN_EMAIL . '>' . "\r\n" .
+			    'Reply-To: ' . $ORGANIZATION_NAME .' <' . $ADMIN_EMAIL . '>' . "\r\n" . 
 			    'Content-type: text/html; charset=us-ascii';
 				
 			//$message = "New password sent.<br/>";
-			if (mail($email, "New password from Nelson Carshare Co-op", $mailText, $headers)) {
+			if (mail($email, "New password from $ORGANIZATION_NAME", $mailText, $headers)) {
 			  $html->add( tag("h2"," New password sent.<br/>"));
 			} else {
 			  //$message = "Email failed, please contact your administrator";

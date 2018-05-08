@@ -40,7 +40,7 @@ function couldnt_book_vehicle()
 		
 		$query = "INSERT INTO ".SQL_PREFIX."couldnt_book_vehicle \n"
 			."(uid, bookable, comment, creationtime) "
-			."VALUES ( '$uid',$bookable, '" . mysql_escape_string( $comment ) . "', NOW() )";
+			."VALUES ( '$uid',$bookable, " . $db->qStr( $comment ) . ", NOW() )";
 	
 		$result = $db->Execute($query);		
 		if(!$result) {

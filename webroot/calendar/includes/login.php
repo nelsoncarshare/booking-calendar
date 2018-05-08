@@ -24,7 +24,7 @@ if(!defined('IN_PHPC')) {
 }
 
 // Initialise the framework sessions 
-require_once $phpc_root_path . '../calendar/admin/cake13/app/config/session_import.php'; 
+require_once $phpc_root_path . '../calendar/admin/cake210/app/config/session_import.php'; 
 
 function get_permissions($id){
 	global $db;
@@ -82,7 +82,7 @@ function login()
 					insert_to_event_log(-1,$_SESSION['uid'],$OPERATION['LOGIN'],-1,$db->DBDate(date("Y-m-d H:i:s", time())),$db->DBDate(date("Y-m-d H:i:s", time())),"","",-1,$CANCELED['NORMAL'], "");
 
                     $selCal = $vars['calendar'];
-                    setcookie("calendar", $selCal, time()+3600*24*48);
+                    setcookie("CAKEPHP", $selCal, time()+3600*24*48);
                     $string = dirname($phpc_script) . "/index.php?cal=" . $selCal;
                     $arguments = array();
                     if(!empty($vars['lastaction']))

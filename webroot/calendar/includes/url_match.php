@@ -48,7 +48,7 @@ class urlmatch
 	var $matchOpeningPunctuation;
 	var $matchClosingPunctuation;
 	
-	function urlmatch()
+	function __construct()
 	// constructor
 	{
 		$this->matchHtmlSrc = "/^href=\"?.*/i";

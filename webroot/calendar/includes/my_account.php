@@ -31,7 +31,7 @@ function user_submit()
 		return "Display name cannot be less than 2 characters";
 	}
 
-	if( !eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$", $email) ) {
+	if( !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 	  return "Invalid email address";
 	}
 	
@@ -151,16 +151,18 @@ function page_text($error_msg, $info_msg)
 	
 	$myInvoices = tag("ul");
 	$lid = str_pad($invoiceableID, 15, 0, STR_PAD_LEFT);
-	if ($handle = opendir(USER_HOME . "invoicables/" . $lid . "/invoices")) {
-	    while (false !== ($file = readdir($handle))) {
-	    	if ($file != "." && $file != ".." && strrpos( $file  , ".html") == strlen($file) - 5){
-	        	$myInvoices->add(tag("li", attributes('style="background: #EEEEEE;"'),
-								tag("a", attributes("href='fileWrapper.php?user=" . $_SESSION['uid'] . "&file=$file'"), "$file")
-							));
-	    	}
-	    }
-	
-	    closedir($handle);
+	$pathStr = USER_HOME . "invoicables/" . $lid . "/invoices";
+	if (file_exists($pathStr)){
+		if ($handle = opendir($pathStr)) {
+			while (false !== ($file = readdir($handle))) {
+				if ($file != "." && $file != ".." && strrpos( $file  , ".html") == strlen($file) - 5){
+					$myInvoices->add(tag("li", attributes('style="background: #EEEEEE;"'),
+									tag("a", attributes("href='fileWrapper.php?user=" . $_SESSION['uid'] . "&file=$file'"), "$file")
+								));
+				}
+			}
+			closedir($handle);
+		}
 	}	
 	
 	$formText->add(
@@ -197,7 +199,7 @@ function user_form($id) {
 
 		$row = get_user_by_id($id);
 
-		$uid = $row['uid'];
+		//$uid = $row['uid'];
 		$display_name = htmlspecialchars(stripslashes($row['displayname']));
 		$address1 =    htmlspecialchars(stripslashes($row['address1']));
 		$address2 =    htmlspecialchars(stripslashes($row['address2']));

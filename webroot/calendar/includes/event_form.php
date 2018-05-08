@@ -22,13 +22,13 @@ function event_submit(&$outID)
 	}
 
 	if(isset($vars['description'])) {
-		$description = mysql_escape_string($vars['description']);
+		$description = $db->qStr($vars['description']);
 	} else {
 		$description = '';
 	}
 
 	if(isset($vars['subject'])) {
-		$subject = mysql_escape_string($vars['subject']);
+		$subject = $db->qStr($vars['subject']);
 	} else {
 		$subject = '';
 	}
@@ -86,8 +86,8 @@ function event_submit(&$outID)
 	$curTime = getdate();
 	$curTimeStamp = mktime($curTime['hours'],$curTime['minutes'],0,$curTime['mon'],$curTime['mday'],$curTime['year']);
 	
-	$startArray = split(":", $hour );
-	$endArray = split(":", $endhour );
+	$startArray = explode(":", $hour );
+	$endArray = explode(":", $endhour );
 	
 	$startstamp = mktime($startArray[0], $startArray[1], 0, $month, $day, $year);
 
@@ -144,8 +144,8 @@ function event_submit(&$outID)
 			."uid=$uid,\n"
 			."starttime=$starttime,\n"
 			."endtime=$endtime,\n"
-			."subject='$subject',\n"
-			."description='$description',\n"
+			."subject=$subject,\n"
+			."description=$description,\n"
 			."bookableobject='$bookable',\n"
 			."vehicle_used_id='$vehicleUsed',"
 			."modifytime=NOW()\n"
@@ -158,8 +158,8 @@ function event_submit(&$outID)
 			."(uid, starttime, endtime,"
 			." subject, description, eventtype, bookableobject, vehicle_used_id, modifytime, creationtime)\n"
 			."VALUES ( '$uid',"
-			."$starttime, $endtime, '$subject',"
-			."'$description', '$typeofevent', '$bookable', '$vehicleUsed', NOW(), NOW())";
+			."$starttime, $endtime, $subject,"
+			."$description, '$typeofevent', '$bookable', '$vehicleUsed', NOW(), NOW())";
 
 		$result = $db->Execute($query);
 		$id = quick_query("SELECT LAST_INSERT_ID() AS lid", "lid");
@@ -345,8 +345,8 @@ function event_form() {
 		
 		$bookable =    $vars['bookable'];
         
-		$startArray = split(":", $starthour);
-		$endArray = split(":", $endhour);
+		$startArray = explode(":", $starthour);
+		$endArray = explode(":", $endhour);
 		
 		$startstamp =   mktime($startArray[0], $startArray[1], 0, $day, $month, $year);
 		$endstamp =     mktime($endArray[0],$endArray[1], 0, $end_day, $end_month, $end_year);
@@ -441,8 +441,8 @@ function event_form() {
 			$uid = $_COOKIE['User'];
 		}		
 
-		$startArray = split(":", $starthour);
-		$endArray = split(":", $endhour);
+		$startArray = explode(":", $starthour);
+		$endArray = explode(":", $endhour);
 		
 		$endstamp =     mktime($endArray[0],$endArray[1],      0, $end_day, $end_month, $end_year);
 		$startstamp =   mktime($startArray[0], $startArray[1], 0, $day, $month, $year);	
@@ -478,11 +478,16 @@ function event_form() {
 	$day_of_month_sequence = create_sequence(1, 31);
 	
 	//============= build form controls
-	if (isset ($id))
+	$idval;
+	if (isset ($id)){
 		$input = create_hidden('id', $id);
-	else
-		$input = '';	
-
+		$idval = $id;
+	}
+	else{
+		$input = '';
+		$idval = -1;
+	}
+	
 	$controls['user'] = 'enabled';
 	$controls['vehicle'] = 'enabled';
 	$controls['starttime'] = 'enabled';
@@ -492,7 +497,7 @@ function event_form() {
 	$controls['submit'] = 'enabled';
 	$controls['check_couldnt_book_car'] = 'enabled';
 	
-	enable_disable_event_form_controls($controls, isset($id), $startstamp, $endstamp, $id);
+	enable_disable_event_form_controls($controls, isset($id), $startstamp, $endstamp, $idval);
 
 	if ($controls['user'] == 'enabled'){
 		$memberFormContol =   create_select('user', $users, $uid);

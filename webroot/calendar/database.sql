@@ -12,7 +12,7 @@ MySQL - 5.6.38 : Database - booking_calendar
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-USE `booking_calendar`;
+USE `nelsonc_carshre`;
 
 /*Table structure for table `phpc_announcementdates` */
 
@@ -96,19 +96,6 @@ CREATE TABLE `phpc_billings` (
   `late_payment_interest` float NOT NULL DEFAULT '0',
   `long_time_member_discount_percent` float NOT NULL DEFAULT '0',
   `long_time_member_discount_max` float NOT NULL DEFAULT '0',
-  `acnt_code_pst` varchar(255) DEFAULT NULL,
-  `acnt_code_gst` varchar(255) DEFAULT NULL,
-  `rental_tax_acnt_code` varchar(255) DEFAULT NULL,
-  `acnt_code_gas_surcharge` varchar(255) DEFAULT NULL,
-  `acnt_code_self_insurance` varchar(255) DEFAULT NULL,
-  `acnt_code_carbon_offset` varchar(255) DEFAULT NULL,
-  `acnt_code_member_plan_low` varchar(255) DEFAULT NULL,
-  `acnt_code_member_plan_med` varchar(255) DEFAULT NULL,
-  `acnt_code_member_plan_high` varchar(255) DEFAULT NULL,
-  `acnt_code_member_plan_organization` varchar(255) DEFAULT NULL,
-  `acnt_code_accounts_receivable` varchar(255) DEFAULT NULL,
-  `acnt_code_long_term_member_discount` varchar(255) DEFAULT NULL,
-  `acnt_code_interest_charged` varchar(255) NOT NULL DEFAULT '',
   `invoice_num_to_start_at` int(11) DEFAULT NULL,
   `invoice_date` date DEFAULT NULL,
   `invoice_due_date` date DEFAULT NULL,
@@ -224,6 +211,8 @@ CREATE TABLE `phpc_chartofaccounts` (
   `show_in_lists` int(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1086 DEFAULT CHARSET=latin1;
+
+INSERT INTO `phpc_chartofaccounts` (`id`, `account`, `type`, `refnum`, `show_in_lists`) VALUES (3,'UNDEFINED',0,0,1);
 
 /*Data for the table `phpc_chartofaccounts` */
 
@@ -410,7 +399,6 @@ CREATE TABLE `phpc_invoiceextraitems` (
   `billing_id` int(11) NOT NULL DEFAULT '0',
   `user_id_depricated` int(11) unsigned DEFAULT NULL,
   `item` varchar(30) NOT NULL DEFAULT '',
-  `acnt_code` varchar(255) NOT NULL DEFAULT '',
   `taxcode` int(11) NOT NULL DEFAULT '0' COMMENT '0=PST,1=GST,2=PST/GST,3=EXEMPT',
   `ammount` float NOT NULL DEFAULT '0',
   `comment` varchar(30) DEFAULT NULL,
@@ -593,17 +581,6 @@ CREATE TABLE `phpc_vehicles` (
   `name` varchar(50) DEFAULT NULL,
   `vehicle_number` varchar(50) DEFAULT NULL,
   `vehicle_type` int(11) DEFAULT NULL,
-  `acnt_code_gas` varchar(255) DEFAULT NULL,
-  `acnt_code_admin` varchar(255) DEFAULT NULL,
-  `acnt_code_repair` varchar(255) DEFAULT NULL,
-  `acnt_code_insurance` varchar(255) DEFAULT NULL,
-  `acnt_code_misc_1` varchar(255) DEFAULT NULL,
-  `acnt_code_misc_2` varchar(255) DEFAULT NULL,
-  `acnt_code_misc_3` varchar(255) DEFAULT NULL,
-  `acnt_code_misc_4` varchar(255) DEFAULT NULL,
-  `acnt_code_hours` varchar(255) DEFAULT NULL,
-  `acnt_code_blocked_time` varchar(255) DEFAULT NULL,
-  `acnt_code_km` varchar(255) DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   `acnt_new_code_gas` int(11) unsigned NOT NULL DEFAULT '0',

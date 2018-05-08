@@ -64,8 +64,8 @@ function trip_estimate_submit(){
 		$end_year = $vars['endyear'];
 	else $error[] = (_('No end year was given'));
 	
-	$startArray = split(":", $hour );
-	$endArray = split(":", $endhour );
+	$startArray = explode(":", $hour );
+	$endArray = explode(":", $endhour );
 	
 	$startstamp = mktime($startArray[0], $startArray[1], 0, $month, $day, $year);
 

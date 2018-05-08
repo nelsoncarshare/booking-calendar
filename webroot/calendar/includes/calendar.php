@@ -60,7 +60,7 @@ function db_error($str, $query = "")
 {
         global $db;
 
-        $string = "$str<br />".$db->ErrorNo().': '.$db->ErrorMsg();
+        $string = "$str<br />: ".$db->ErrorMsg();
         if($query != "") {
                 $string .= "<br />"._('SQL query').": $query";
         }
@@ -820,7 +820,7 @@ function can_add_event()
 // returns XHTML data for the navbar
 function navbar()
 {
-	global $vars, $action, $config, $year, $month, $day, $USER_GUIDE_URL;
+	global $vars, $action, $config, $year, $month, $day, $USER_GUIDE_URL, $phpc_script;
 
 	$html = tag('nav', attributes('class="nav phpc-navbar"'));
 		$html->add(tag("ul",attributes('class="nav-list"')));
@@ -1271,7 +1271,7 @@ function is_allowed_permission_checkpoint($checkpoint){
     if (isset($_SESSION['permission'])){
         $permission = $_SESSION['permission'];
     }
-	$myperms = split(",", $permission);
+	$myperms = explode(",", $permission);
 	
 	foreach ($myperms as $value){
 		$mywhere .= " OR permission='$value'";

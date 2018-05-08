@@ -1,4 +1,4 @@
--- $CVSHeader: carshare/calendar/adodb/session/adodb-sessions.mysql.sql,v 1.1 2007/12/17 23:23:01 ian Exp $
+-- $CVSHeader$
 
 CREATE DATABASE /*! IF NOT EXISTS */ adodb_sessions;
 

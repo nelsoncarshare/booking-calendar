@@ -98,7 +98,9 @@ foreach($_POST as $key => $value) {
 // Load configuration
 if(!empty($vars['calendar_name'])) {
 	$calendar_name = $vars['calendar_name'];
-} // calendar name is otherwise set to 0
+} else {
+	$calendar_name = 0;
+}
 
 $query = "SELECT * from " . SQL_PREFIX .
         "calendars WHERE calendar='$calendar_name'";
