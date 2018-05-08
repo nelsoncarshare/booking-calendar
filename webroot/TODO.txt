@@ -1,0 +1,7 @@
+How vanilla are the model, view, controllers (this would be better to do in 3.6)
+Session_Import is broken
+What does translateArrayOfAcntFields do
+
+
+
+
