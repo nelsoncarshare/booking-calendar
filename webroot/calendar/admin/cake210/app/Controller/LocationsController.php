@@ -12,6 +12,7 @@ class LocationsController extends AppController {
         $this->checkSession();
     }
 
+	/*
 	function export() 
 	{  
 		Configure::write('debug',0); 
@@ -31,8 +32,22 @@ class LocationsController extends AppController {
 		
 		$this->set(compact('data')); 
 		$this->set('tableName', $tableName);
-	} 	
+	} 
+*/	
     
+	function export(){
+		$this->response->download("export.csv");
+
+		$tableName = "Location";
+		$data = $this->Location->find('all', array($tableName => $tableName . ".id ASC",'contain' => false));
+		
+		$this->set(compact('data'));
+
+		$this->layout = 'json';
+
+		return;	
+	}		
+	
 	function index() {
 		$this->Location->recursive = 0;
         $this->set('locations', $this->paginate());

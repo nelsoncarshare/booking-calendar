@@ -28,36 +28,19 @@ class UsersController extends AppController {
 		return $d;	
 	}
 	
-	/*
-	function export() 
-	{  
-		Configure::write('debug',0); 
+
+	
+	function export(){
+		$this->response->download("export.csv");
+
 		$tableName = "User";
 		$data = $this->User->find('all', array($tableName => $tableName . ".id ASC",'contain' => false));
 		
-		$ks = array_keys($data[0][$tableName]);
-		
-		$headers1 = Array();
-		foreach ($ks as $value){
-			$headers1[] = $value;
-		}
-		
-		$headers = array($tableName=> $headers1); 
-		
-		array_unshift($data,$headers); 
-		
-		$this->set(compact('data')); 
-		$this->set('tableName', $tableName);
-	} 
-*/	
+		$this->set(compact('data'));
 
-	function export() 
-	{  			
-		$tableName = "User";
-		$data = $this->User->find('all', array($tableName => $tableName . ".id ASC",'contain' => false));		
-		
-		$this->viewClass = 'CsvView.Csv';
-		$this->set(compact('data', compact($data)));
+		$this->layout = 'json';
+
+		return;	
 	}
 	
 	function index() {

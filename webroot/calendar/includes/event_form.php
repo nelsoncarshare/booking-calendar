@@ -330,10 +330,9 @@ function event_form() {
 		}
 		$subject = $vars['subject'];
 		$desc =    $vars['description'];
-    $uid =     $vars['user'];
-		$id = 		 $vars['id'];	
+		$uid =     $vars['user'];
 
-    $starthour = $vars['starthour'];
+		$starthour = $vars['starthour'];
 		$day       = $vars['day'];
 		$month     = $vars['month'];
 		$year      = $vars['year'];
@@ -623,7 +622,10 @@ function event_form() {
 
     if ($action == "trip_estimate"){
         $LIST_COST_ESTIMATE = true;
+		$TABLE_FORM = false;
+		$LIST_FORM = false;
     }else{
+		$LIST_COST_ESTIMATE = false;
         $TABLE_FORM = true;
         $LIST_FORM = false;
     }
@@ -631,7 +633,7 @@ function event_form() {
 	if ($TABLE_FORM){
         $retText->add( tag('div',	
                          tag('form', attributes("action=\"$phpc_script\" name='event_form' id='event_form' method='post'" ), 
-                                    tag('table', attributes('class="phpc-main" border="0"'), tag('caption', $title), tag('tfoot', 
+                                    tag('table', attributes('class="phpc-main" border="0"'), tag('caption', 'Book A Vehicle'), tag('tfoot', 
                                         tag('tr', tag('td', attributes('colspan="2"'), $input, create_hidden('action', 'event_form'), create_hidden('subaction', 'event_submit')))), 
                                         tag('tbody',
                                             tag('tr', 

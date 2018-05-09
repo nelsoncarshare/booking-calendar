@@ -875,12 +875,12 @@ function navbar()
 
 	if(is_allowed_permission_checkpoint("DISPLAY_ADMIN_LINK")) {
 	  $html->add(tag("li",attributes('class="nav-item"')));
-    $html->add(tag('a', attributes("href='admin/cake13/staticpages/'"),_('Admin')));		
+    $html->add(tag('a', attributes("href='admin/cake210/staticpages/'"),_('Admin')));		
 	}
 
 	if(is_allowed_permission_checkpoint("DISPLAY_ADMIN_BOOKINGS_L")) {
 		       $html->add(tag("li",attributes('class="nav-item"')));
-		menu_item_append($html, _('administer bookings'), 'redirect&page=admin/cake13/administerbookings');
+		menu_item_append($html, _('administer bookings'), 'redirect&page=admin/cake210/administerbookings');
 	}	
 	
 	

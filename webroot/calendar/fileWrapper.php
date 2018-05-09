@@ -1,7 +1,7 @@
 <?php
 
 define('IN_PHPC', true);
-
+$phpc_root_path = './';
 require_once($phpc_root_path . 'custom/config.php');
 require_once($phpc_root_path . 'includes/calendar.php');
 require_once($phpc_root_path . 'includes/setup.php');
@@ -31,6 +31,7 @@ if ((check_user() && $_SESSION['uid'] == $userid) || is_allowed_permission_check
 	}
 	
 	$myFile = USER_HOME . "invoicables/" . $lid . "/invoices/" . $filename;
+	$theData = "";
 	if ($handle = fopen($myFile, 'r') ){
 	    while (!feof($handle)) {
         	$theData .= fgets($handle, 4096);

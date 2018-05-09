@@ -7,8 +7,8 @@ global $noNavbar;
 $noNavbar = true;
 
 require_once($phpc_root_path . 'includes/event_form.php');
-require_once($phpc_root_path . 'admin/cake13/app/vendors/calendar/generate_invoices_inc.php');
-require_once($phpc_root_path . 'admin/cake13/app/vendors/calendar/generate_invoices_local_inc.php');
+require_once($phpc_root_path . 'admin/cake210/app/Vendor/calendar/generate_invoices_inc.php');
+require_once($phpc_root_path . 'admin/cake210/app/Vendor/calendar/generate_invoices_local_inc.php');
 
 function trip_estimate_submit(){
 	global $calendar_name, $day, $month, $year, $db, $vars, $config,
@@ -105,10 +105,19 @@ function trip_estimate_submit(){
         'end_year' => $end_year,
         'end_month' => $end_month,
         'end_day' => $end_day,
-        'hour' => $hour,
-        'minute' => $minute,
-        'end_hour' => $endhour,
-        'end_minute' => $endminute,
+        'hour' => $startArray[0],
+        'minute' => $startArray[1],
+        'end_hour' => $endArray[0],
+        'end_minute' => $endArray[1],
+		'canceled' => false,
+		'eventid' => 1,
+		'bookablevehicle_id' => 1,
+		'vehicle_used_id' => 1,
+		'admin_ignore_this_booking' => "",
+		'admin_ignore_km_hours' => "",
+		'acnt_new_code_hours' => "",	
+		'acnt_new_code_km' => "",
+		'charge_bc_rental_tax' => ""
         );
 
 	set_bookable_row_values($row, $bookableRow);

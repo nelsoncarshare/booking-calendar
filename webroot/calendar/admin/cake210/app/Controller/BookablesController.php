@@ -13,6 +13,7 @@ class BookablesController extends AppController {
         $this->checkSession();
     }
 
+	/*
 	function export() 
 	{  
 		Configure::write('debug',0); 
@@ -33,6 +34,20 @@ class BookablesController extends AppController {
 		$this->set(compact('data')); 
 		$this->set('tableName', $tableName);
 	} 
+	*/
+	
+	function export(){
+		$this->response->download("export.csv");
+
+		$tableName = "Bookables";
+		$data = $this->Bookable->find('all', array($tableName => $tableName . ".id ASC",'contain' => false));
+		
+		$this->set(compact('data'));
+
+		$this->layout = 'json';
+
+		return;	
+	}	
     
 	function index() {
 		$this->Bookable->recursive = 0;

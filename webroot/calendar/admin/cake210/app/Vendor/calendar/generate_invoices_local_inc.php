@@ -686,12 +686,16 @@ function getBookingInvoiceRow($totalDistance, $billing, $row, $plan, &$subtotals
 		$event_note .= " from " . $startStr . " to " . $endStr . $myState;
 		
 		if ($row['is_flat_daily_rate'] == 0){
-			$event_hours = " high " . (($timeCharge['highSlots'] + $timeCharge['highSlotsFromCancel'])/4) . "h low " . 
-								(($timeCharge['lowSlots'] + $timeCharge['lowSlotsFromCancel'])/4) . "h ";
-			$event_note .= " high-rate " . ($timeCharge['highSlots']/4) . "h low-rate " . ($timeCharge['lowSlots']/4) . "h ";
+			$timeHighTotal = ($timeCharge['highSlots'] + $timeCharge['highSlotsFromCancel'])/4;
+			$timeLowTotal = ($timeCharge['lowSlots'] + $timeCharge['lowSlotsFromCancel'])/4;
+			$timeHigh = ($timeCharge['highSlots']/4);
+			$timeLow = ($timeCharge['lowSlots']/4);
+			$event_hours = " high " . number_format($timeHighTotal,2,'.','') . "h low " . 
+								number_format($timeLowTotal,2,'.','') . "h ";
+			$event_note .= " high-rate " . number_format($timeHigh,2,'.','') . "h low-rate " . number_format($timeLow,2,'.','') . "h ";
 		} else {
-			$event_note .= " " . $timeCharge['highDays'] . " high days, " . $timeCharge['lowDays'] . " low days";
-			$event_hours = " high " . $timeCharge['highDays'] . "d low " . $timeCharge['lowDays'] . "d";
+			$event_note .= " " . number_format($timeCharge['highDays'],2,'.','') . " high days, " . number_format($timeCharge['lowDays'],2,'.','') . " low days";
+			$event_hours = " high " . number_format($timeCharge['highDays'],2,'.','') . "d low " . number_format($timeCharge['lowDays'],2,'.','') . "d";
 		}
 		
 		if ($numExtraQuarterHoursFromCancelAndMod['total'] > 0) {
