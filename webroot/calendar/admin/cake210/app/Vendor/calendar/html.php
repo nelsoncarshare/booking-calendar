@@ -12,12 +12,6 @@ class Html {
         var $attributeList;
         var $childElements;
 
-        function Html() {
-                $args = func_get_args();
-                return call_user_func_array(array(&$this, '__construct'),
-                                $args);
-        }
-
         function __construct() {
                 $args = func_get_args();
                 $this->tagName = array_shift($args);
@@ -118,12 +112,6 @@ class Html {
  */
 class AttributeList {
         var $list;
-
-        function AttributeList() {
-                $args = func_get_args();
-                return call_user_func_array(array(&$this, '__construct'),
-                                $args);
-        }
 
         function __construct() {
                 $this->list = array();

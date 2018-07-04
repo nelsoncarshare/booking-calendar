@@ -1,6 +1,6 @@
 <div class="invoiceextraitems index">
 	<h2><?php echo __('Invoiceextraitems');?></h2>
-    <div align="center"><?php echo $this->html->link('[Back To Admin]', '/staticpages/'); ?><br/></div>
+    <div align="center"><?php echo $this->Html->link('[Back To Admin]', '/staticpages/'); ?><br/></div>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th class="actions"><?php echo __('Actions');?></th>

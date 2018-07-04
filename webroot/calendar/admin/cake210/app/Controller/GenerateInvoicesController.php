@@ -11,7 +11,7 @@ require_once(App::path('Vendor')[0] . 'adodb/adodb.inc.php');
 		App::import('Vendor','calendar/generate_invoices_form');
 		App::import('Vendor','calendar/generate_invoices_rpt');	
 		
-class GenerateInvoicesController extends AppController{
+class GenerateinvoicesController extends AppController{
 
 	public $uses = array('Invoices');
 	public $helpers = array('Html', 'Form' );

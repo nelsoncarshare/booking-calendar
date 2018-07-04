@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class GroupsController extends AppController {
 
 
-	public $helpers = array('Html', 'Form', 'csv' );
+	public $helpers = array('Html', 'Form', 'Csv' );
 	public $uses = array('Group', 'Invoicable', 'Chartofaccounts');
     public $paginate = array('limit' => 100 ,'order' => array(            'Group.grp_displayname' => 'asc'        )  );
 	public $components = array('RequestHandler');

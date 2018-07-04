@@ -1,8 +1,8 @@
 <div>
-<div align="center"><?php echo $this->html->link('[Back To Admin]', '/staticpages/'); ?></div>
+<div align="center"><?php echo $this->Html->link('[Back To Admin]', '/staticpages/'); ?></div>
 
-<?php echo $this->html->css('themes/sand/grid'); ?>
-<?php echo $this->html->css('jqModal'); ?>
+<?php echo $this->Html->css('themes/sand/grid'); ?>
+<?php echo $this->Html->css('jqModal'); ?>
 
 <!-- Of course we should load the jquery library -->
 <script>

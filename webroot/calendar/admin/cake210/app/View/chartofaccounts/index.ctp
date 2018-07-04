@@ -25,9 +25,9 @@ jQuery(document).ready(function(){
 </script>
 
 
-<div align="center"><?php echo $this->html->link('[Back To Admin]', '/staticpages/'); ?></div>
+<div align="center"><?php echo $this->Html->link('[Back To Admin]', '/staticpages/'); ?></div>
 
-<form action="<?php echo $this->html->url('/chartofaccounts/add'); ?>" method="post" enctype="multipart/form-data">
+<form action="<?php echo $this->Html->url('/chartofaccounts/add'); ?>" method="post" enctype="multipart/form-data">
 	<label for="FileImage">Upload Chart Of Accounts IIF File</label>
 	<input type="file" name="data[File][image]" id="FileImage" />
 	<?php echo $this->form->submit('Upload');?>

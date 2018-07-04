@@ -468,7 +468,7 @@ function event_history($id)
 }
 function modal_id($id)
 {
-	global $noNavbar, $db, $year, $month, $day, $config, $phpc_script, $EVENT_TYPE_BOOKING;
+	global $noNavbar, $db, $year, $month, $day, $config, $phpc_script, $EVENT_TYPE_BOOKING, $VEHICLE_LABEL;
 	$noNavbar = true;
 
 	if (!isset( $_SESSION['uid'])){
@@ -514,7 +514,7 @@ function modal_id($id)
                 $retVal->add( tag('div', attributes('class="phpc-main"'),
                                 $modifyDeleteLinks,                               
                                 tag('div', 'User: ', tag('cite', $name)),
-                                tag('div', 'Vehicle: ', tag('cite', $vehicle)),
+                                tag('div', "$VEHICLE_LABEL: ", tag('cite', $vehicle)),
 
                                 tag('div',
 					tag('div', _('Start Time').": $time_str $date_str"),
@@ -531,7 +531,7 @@ function modal_id($id)
 // returns XHTML data for the event
 function display_id($id)
 {
-	global $db, $year, $month, $day, $config, $phpc_script, $EVENT_TYPE_BOOKING;
+	global $db, $year, $month, $day, $config, $phpc_script, $EVENT_TYPE_BOOKING, $VEHICLE_LABEL;
 
 	if (!isset( $_SESSION['uid'])){
 		redirect($phpc_script . "?action=login");
@@ -576,7 +576,7 @@ function display_id($id)
                 $retVal->add( tag('div', attributes('class="phpc-main"'),
                                 $modifyDeleteLinks,                               
                                 tag('div', 'User: ', tag('cite', $name)),
-                                tag('div', 'Vehicle: ', tag('cite', $vehicle)),
+                                tag('div', "$VEHICLE_LABEL: ", tag('cite', $vehicle)),
 
                                 tag('div',
 					tag('div', _('Start Time').": $time_str $date_str"),
@@ -589,7 +589,7 @@ function display_id($id)
 }
 
 function get_event_history($id){
-	global $db, $OPERATION;
+	global $db, $OPERATION, $VEHICLE_LABEL;
 	$histTable = tag("table", attributes("class='phpc-main'"),
 						tag('caption', "Modification History"),
 							tag("thead",
@@ -607,7 +607,7 @@ function get_event_history($id){
 											"Is For"
 										),
 									tag("th",
-											"Vehicle"
+											"$VEHICLE_LABEL"
 										),			
 									tag("th",
 											"Start Time"

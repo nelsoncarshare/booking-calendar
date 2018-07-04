@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class UsersController extends AppController {
 
 
-	public $helpers = array('Html', 'Form', 'csv');
+	public $helpers = array('Html', 'Form', 'Csv');
     public $paginate = array('limit' => 100 ,'order' => array(            'User.displayname' => 'asc'        )  );
 	public $uses = array('User', 'Chartofaccounts');
 	public $components = array('RequestHandler');

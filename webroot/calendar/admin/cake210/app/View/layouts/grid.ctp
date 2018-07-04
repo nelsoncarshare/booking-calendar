@@ -6,10 +6,13 @@
 <body>
 	<div id="container">
 		<div id="content">
-			<?php if ($this->session->check('Message.flash'))
+			<?php 
+					/*
+					if ($this->Session->check('Message.flash'))
 					{
-						$this->session->flash();
+						$this->Session->flash();
 					}
+					*/
 					echo $content_for_layout;
 			?>
 		</div>

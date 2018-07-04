@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class VehiclesController extends AppController {
 
 
-	public $helpers = array('Html', 'Form', 'csv');
+	public $helpers = array('Html', 'Form', 'Csv');
     public $uses = array('Vehicle', 'Vehicletype', 'Chartofaccounts');
     public $paginate = array('limit' => 100 ,'order' => array(            'Vehicle.name' => 'asc'        )  );
 	public $components = array('RequestHandler');

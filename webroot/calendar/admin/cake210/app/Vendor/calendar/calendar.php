@@ -669,14 +669,14 @@ function can_add_event()
 // returns XHTML data for the navbar
 function navbar()
 {
-	global $vars, $action, $config, $year, $month, $day;
+	global $vars, $action, $config, $year, $month, $day, $VEHICLE_LABEL;
 
 	$html = tag('div', attributes('class="phpc-navbar"'));
 
 	$html->add(_("|&nbsp;"));
 
 	if(can_add_event() && $action != 'add') { 
-		menu_item_append($html, _('book a vehicle'), 'event_form', $year,
+		menu_item_append($html, _("book a $VEHICLE_LABEL"), 'event_form', $year,
 				$month, $day);
 	}
 

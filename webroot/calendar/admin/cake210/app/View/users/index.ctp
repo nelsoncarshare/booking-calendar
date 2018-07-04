@@ -1,5 +1,5 @@
 <div class="users index">
-    <div align="center"><?php echo $this->html->link('[Back To Admin]', '/staticpages/'); ?><br/></div>
+    <div align="center"><?php echo $this->Html->link('[Back To Admin]', '/staticpages/'); ?><br/></div>
 
 	<h2><?php echo __('Users');?></h2>
 	<p>

@@ -23,7 +23,7 @@ if(!defined('IN_PHPC')) {
        die("Hacking attempt");
 }
 
-//require_once 'admin/cake13/app/config/session_import.php';
+//require_once 'admin/cake13/app/Config/session_import.php';
 
 function logout()
 {

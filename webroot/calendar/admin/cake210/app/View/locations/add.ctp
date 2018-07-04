@@ -6,7 +6,7 @@
 		echo $this->Form->input('name');
 		echo $this->Form->input('address1');
 		echo $this->Form->input('city');
-		echo $this->Form->input('comment');
+		echo $this->Form->input('comment', Array('type' => 'textarea'));
 		echo $this->Form->input('URL');
 		echo $this->Form->input('GPS_coord_x');
 		echo $this->Form->input('GPS_coord_y');

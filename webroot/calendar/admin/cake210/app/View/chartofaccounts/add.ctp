@@ -1,5 +1,5 @@
 <div>
-<div align="center"><?php echo $this->html->link('[Back To Admin]', '/staticpages/'); ?></div>
+<div align="center"><?php echo $this->Html->link('[Back To Admin]', '/staticpages/'); ?></div>
 
 	<?php
 	if (Count($errors) > 0){

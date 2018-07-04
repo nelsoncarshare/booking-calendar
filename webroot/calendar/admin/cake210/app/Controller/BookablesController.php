@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class BookablesController extends AppController {
 
 
-	public $helpers = array('Html', 'Form', 'csv' );
+	public $helpers = array('Html', 'Form', 'Csv' );
     public $paginate = array('limit' => 100 ,'order' => array(            'Bookable.name' => 'asc'        )  );
     public $components = array('RequestHandler');
 	

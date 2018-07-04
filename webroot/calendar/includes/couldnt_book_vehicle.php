@@ -25,7 +25,7 @@ if ( !defined('IN_PHPC') ) {
 
 function couldnt_book_vehicle()
 {
-	global $config, $phpc_script, $vars, $calendar_name, $noNavbar, $db;
+	global $config, $phpc_script, $vars, $calendar_name, $noNavbar, $db, $VEHICLE_LABEL;
 
 	if (!isset( $_SESSION['uid'])){
 		redirect($phpc_script . "?action=login");
@@ -49,7 +49,7 @@ function couldnt_book_vehicle()
 	}
 	
 	$result = get_vehicles($calendar_name);
-	$vehicles[-1] = "PLEASE SELECT A VEHICLE";
+	$vehicles[-1] = "PLEASE SELECT A $VEHICLE_LABEL";
 	if ($row1 = $result->FetchRow()) {
 		for (; $row1; $row1 = $result->FetchRow()) {
 			$vehicles[$row1['id']] = $row1['dropdownname'];
@@ -59,15 +59,15 @@ function couldnt_book_vehicle()
 	$vehicleFormControl = tag( "font", create_select('bookable', $vehicles, 0));
 
  	$frm = tag('form', attributes("action=\"$phpc_script\""), create_hidden('action', 'couldnt_book_vehicle'));
-	$tbl = tag("table", attributes("class='phpc-main' border='0' cellpadding='0' cellspacing='0'"), tag('caption', "Couldn't Book Vehicle"));
+	$tbl = tag("table", attributes("class='phpc-main' border='0' cellpadding='0' cellspacing='0'"), tag('caption', "Couldn't Book $VEHICLE_LABEL"));
 
 	$tbody = tag("tbody");
 	$tr = tag("tr");
-	$tr->add(tag("td", attributes("colspan=2"), "Please take a moment to let us know if you had a problem booking a vehicle. This helps us plan where vehicles are placed.<br/><br/>"));
+	$tr->add(tag("td", attributes("colspan=2"), "Please take a moment to let us know if you had a problem booking a $VEHICLE_LABEL. This helps us plan where $VEHICLE_LABEL s are placed.<br/><br/>"));
 	$tbody->add($tr);
 
 	$tr = tag("tr");
-	$tr->add(tag("td", attributes("nowrap='true'"), "Vehicle you wanted to book:"));
+	$tr->add(tag("td", attributes("nowrap='true'"), "$VEHICLE_LABEL you wanted to book:"));
 	$tr->add(tag("td", attributes("valign='left'"), $vehicleFormControl));
 
   $tbody->add($tr);

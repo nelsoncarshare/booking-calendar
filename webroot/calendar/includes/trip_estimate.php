@@ -12,7 +12,7 @@ require_once($phpc_root_path . 'admin/cake210/app/Vendor/calendar/generate_invoi
 
 function trip_estimate_submit(){
 	global $calendar_name, $day, $month, $year, $db, $vars, $config,
-	       $phpc_script, $CANCELED, $OPERATION, $EVENT_TYPE_BOOKING, $MEMBER_PLANS;
+	       $phpc_script, $CANCELED, $OPERATION, $EVENT_TYPE_BOOKING, $MEMBER_PLANS, $VEHICLE_LABEL;
     
     $error = Array();           
 
@@ -47,9 +47,9 @@ function trip_estimate_submit(){
 
 	if(isset($vars['bookable']))
 		$bookable = $vars['bookable'];
-	else $error[] = (_('No vehicle was given.'));
+	else $error[] = (_("No $VEHICLE_LABEL was given."));
 	if ($bookable == 0 || $bookable == -1){
-		$error[] = (_('No vehicle was selected.'));
+		$error[] = (_("No $VEHICLE_LABEL was selected."));
 	}
 	
 	if(isset($vars['endday']))

@@ -1,5 +1,5 @@
 <div class="announcementdates index">
-<div align="center"><?php echo $this->html->link('[Back To Admin]', '/staticpages/'); ?><br/></div>
+<div align="center"><?php echo $this->Html->link('[Back To Admin]', '/staticpages/'); ?><br/></div>
 	<h2><?php echo __('Announcementdates'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<thead>

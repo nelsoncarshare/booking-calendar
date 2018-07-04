@@ -8,7 +8,7 @@ require_once(App::path('Vendor')[0] . 'adodb/adodb.inc.php');
 		App::import('Vendor', 'calendar/list_invoices_form');
 		App::import('Vendor', 'calendar/list_user_invoices_rpt');
 		
-class ListInvoicesController extends AppController{
+class ListinvoicesController extends AppController{
 
 	public $uses = array();
 	public $helpers = array('Html', 'Form' );

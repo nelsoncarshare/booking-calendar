@@ -9,7 +9,7 @@ if (!defined('IN_PHPC')) {
 function event_submit(&$outID)
 {
 	global $calendar_name, $day, $month, $year, $db, $vars, $config,
-	       $phpc_script, $CANCELED, $OPERATION, $EVENT_TYPE_BOOKING;
+	       $phpc_script, $CANCELED, $OPERATION, $EVENT_TYPE_BOOKING, $VEHICLE_LABEL;
 
 	$outID = -1;
 	$typeofevent = $EVENT_TYPE_BOOKING;
@@ -60,9 +60,9 @@ function event_submit(&$outID)
 
 	if(isset($vars['bookable']))
 		$bookable = $vars['bookable'];
-	else return (_('No vehicle was given.'));
+	else return (_("No $VEHICLE_LABEL was given."));
 	if ($bookable == 0 || $bookable == -1){
-		return (_('No vehicle was selected.'));
+		return (_("No $VEHICLE_LABEL was selected."));
 	}
 	
 	if(isset($vars['endday']))
@@ -177,13 +177,13 @@ function event_submit(&$outID)
 
 //set the $ignoreid field to -1 if we expect no records
 function check_if_booking_overlaps($startstamp,$endstamp,$bookable,$userID,$eventtype, $ignoreid=-1){
-	global $EVENT_TYPE_BOOKING;
+	global $EVENT_TYPE_BOOKING, $VEHICLE_LABEL;
 	$result = get_events_for_bookable_in_interval($startstamp,$endstamp,$bookable);
 	while($row = $result->FetchRow()){
 		if ($ignoreid == -1){
-			return (_('Your booking overlaps with another booking for this vehicle.'));		
+			return (_("Your booking overlaps with another booking for this $VEHICLE_LABEL."));		
 		} else if ($row['id'] != $ignoreid){
-			return (_('Your booking overlaps with another booking for this vehicle.'));					
+			return (_("Your booking overlaps with another booking for this $VEHICLE_LABEL."));					
 		}
 	}
 	return "";
@@ -302,7 +302,7 @@ function get_javascript_validation($path){
 
 
 function event_form() {
-	global $noNavbar, $vars, $day, $month, $year, $db, $config, $phpc_script, $month_names, $event_types, $calendar_name, $action, $ANNOUNCE_TYPES;
+	global $noNavbar, $vars, $day, $month, $year, $db, $config, $phpc_script, $month_names, $event_types, $calendar_name, $action, $ANNOUNCE_TYPES, $VEHICLE_LABEL;
 
 	$noNavbar = false;
 
@@ -449,7 +449,7 @@ function event_form() {
 	
 	// ================= prepare sequences for dropdown lists.
 	$result = get_vehicles($calendar_name);
-	$vehicles[-1] = "PLEASE SELECT A VEHICLE";
+	$vehicles[-1] = "PLEASE SELECT A " . ucfirst($VEHICLE_LABEL);
 	if ($row1 = $result->FetchRow()) {
 		for (; $row1; $row1 = $result->FetchRow()) {
 			$vehicles[$row1['id']] = $row1['dropdownname'];
@@ -633,7 +633,7 @@ function event_form() {
 	if ($TABLE_FORM){
         $retText->add( tag('div',	
                          tag('form', attributes("action=\"$phpc_script\" name='event_form' id='event_form' method='post'" ), 
-                                    tag('table', attributes('class="phpc-main" border="0"'), tag('caption', 'Book A Vehicle'), tag('tfoot', 
+                                    tag('table', attributes('class="phpc-main" border="0"'), tag('caption', "Book A " . ucfirst($VEHICLE_LABEL)), tag('tfoot', 
                                         tag('tr', tag('td', attributes('colspan="2"'), $input, create_hidden('action', 'event_form'), create_hidden('subaction', 'event_submit')))), 
                                         tag('tbody',
                                             tag('tr', 
@@ -646,7 +646,7 @@ function event_form() {
 																tag('div',
 																	tag('table',
                                             tag('tr', tag('th', _('For Member')), tag('td', $memberFormContol ) ), 
-                                            tag('tr', tag('th', _('Vehicle')), tag('td', $vehicleFormControl, tag('a', attributes("id='openCouldntBookCarLink' href='#'"), "Couldn't get what you wanted?") )), 
+                                            tag('tr', tag('th', _(ucfirst($VEHICLE_LABEL))), tag('td', $vehicleFormControl, tag('a', attributes("id='openCouldntBookCarLink' href='#'"), "Couldn't get what you wanted?") )), 
 
 											tag('tr', tag('th', _('&nbsp;')), tag('td',  $show_available)),
 
@@ -666,7 +666,7 @@ function event_form() {
 																	tag('a', attributes("href='#' id='refreshShowAvailability'"), "refresh show availability")
 																),
 */
-																tag('h3', 'Vehicle Locations'),
+																tag('h3', ucfirst($VEHICLE_LABEL) . " Locations"),
 																tag('div','<iframe src="../../show_vehicle_locations.php?cal='.$calendar_name.'" width="402" height="402" marginheight="0" marginwidth="0" scrolling="no"></iframe>')	
 														),
 														'<script type="text/javascript">
@@ -688,7 +688,7 @@ function event_form() {
                              tag('form', attributes("action=\"$phpc_script\"","method=\"post\""), 
                                 tag('ul', attributes('class="phpc-main" border="0"'),
                                     tag('li', 'For Member', $memberFormContol),
-                                    tag('li', 'Vehicle', $vehicleFormControl, tag('a', attributes("id='openCouldntBookCarLink' href='#'"), "Couldn't get what you wanted?")),
+                                    tag('li', ucfirst($VEHICLE_LABEL), $vehicleFormControl, tag('a', attributes("id='openCouldntBookCarLink' href='#'"), "Couldn't get what you wanted?")),
                                     tag('li', 'Start Date', $day_selector, $month_selector, $year_selector, "Start Time", $html_time),
                                     tag('li', 'End Date',   $end_day_selector, $end_month_selector, $end_year_selector, " End Time", $html_end_time),
                                     tag('li', 'Subject',  $subject_control),
@@ -704,7 +704,7 @@ function event_form() {
                         tag('div',
                              tag('form', attributes("id='trip_estimate' action=\"$phpc_script\"", "method=\"post\""), 
                                 tag('ul', attributes('class="phpc-main" border="0"'),
-                                    tag('li class="estimate"', 'Your Vehicle: ', $vehicleFormControl),
+                                    tag('li class="estimate"', 'Your ' . ucfirst($VEHICLE_LABEL) . ': ', $vehicleFormControl),
                                     tag('li class="estimate"', 'Start Date: ', $date_selector, $day_selector,$month_selector,$year_selector),
                                     tag('li class="estimate"', 'Start Time: ', $html_time),
                                     tag('li class="estimate"', 'End Date: ',   $end_date_selector, $end_day_selector, $end_month_selector, $end_year_selector),

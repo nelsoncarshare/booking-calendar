@@ -1,7 +1,7 @@
 <?php
 App::uses('AppController', 'Controller');
 
-class ChartOfAccountsController extends AppController {
+class ChartofaccountsController extends AppController {
 
 
 	public $helpers = array('Html', 'Form' );

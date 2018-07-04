@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class LocationsController extends AppController {
 
 
-	public $helpers = array('Html', 'Form', 'csv' );
+	public $helpers = array('Html', 'Form', 'Csv' );
     public $paginate = array('limit' => 100 ,'order' => array(            'Location.name' => 'asc'        )  );
 	public $components = array('RequestHandler');
     function beforeFilter()

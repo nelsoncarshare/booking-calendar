@@ -24,7 +24,7 @@ if(!defined('IN_PHPC')) {
 }
 
 // Initialise the framework sessions 
-require_once $phpc_root_path . '../calendar/admin/cake210/app/config/session_import.php'; 
+//require_once $phpc_root_path . '../calendar/admin/cake210/app/Config/session_import.php'; 
 
 function get_permissions($id){
 	global $db;
