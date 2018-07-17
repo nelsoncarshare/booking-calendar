@@ -35,9 +35,10 @@ function user_preview_invoice_rpt(){
 	}
 	
 	$invErrors = Array();
-	$outData = generate_invoice_for_user_or_group($query_month,$query_year,$invoicableid, 1, $invoiceNumber, $previousOwing, $paymentMade, $billing, "", $errors);
+	$invoiceGenerator = new GenerateInvoicesLocal();
+	$outData = $invoiceGenerator->generate_invoice_for_user_or_group($query_month,$query_year,$invoicableid, 1, $invoiceNumber, $previousOwing, $paymentMade, $billing, "", $errors);
 	
-	$outStr = skin_invoice_html($outData, $invErrors);
+	$outStr = $invoiceGenerator->skin_invoice_html($outData, $invErrors);
 
 	$errors = tag("div");
 	foreach($invErrors as $err){

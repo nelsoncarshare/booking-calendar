@@ -47,6 +47,7 @@ function get_invoicable_info($invoicable_id){
 	             ", ".SQL_PREFIX."invoicables.user_id ".
 	             ", ".SQL_PREFIX."invoicables.group_id ".
 	             ", ".SQL_PREFIX."invoicables.force_user_member_plan ".
+				 ", ".SQL_PREFIX."invoicables.is_member ".
 	             ", ".SQL_PREFIX."grouptypes.type as type".
 	             ", ".SQL_PREFIX."users.displayname ".
 	             ", ".SQL_PREFIX."users.disabled ".
@@ -277,70 +278,6 @@ function get_invoice($userid,$invoicable_id,$billing_id){
 		return $row;
 	} else {
 		return NULL;
-	}
-}
-
-function get_time_charge($numQuarterHoursDay,$numQuarterHoursNight, $numQuarterHoursCancelModDay, $numQuarterHoursCancelModNight, $rateLow, $rateHigh, $isFlatDailyRate, $dailyRateLow, $dailyRateHigh, $hours_cutoff){
-	if ($isFlatDailyRate != 0){
-		
-		$numdays = ceil($numQuarterHoursDay / 96);
-		//echo($numdays);
-		$CUTOFF = $hours_cutoff / 24; //number of days until cutoff
-		$highDays = (float) ((float) min($numdays, $CUTOFF));
-		$lowDays = (float) ((float) max($numdays-$highDays, 0.0));
-		$highRateCharge = $highDays * $dailyRateHigh;
-		$lowRateCharge = $lowDays * $dailyRateLow;
-		//$timeCharge = 0;
-		return array( "charge" => round($highRateCharge + $lowRateCharge, 2), "highSlots" => 0, "lowSlots" => 0,
-						"highSlotsFromCancel" => 0, "lowSlotsFromCancel" => 0,
-						"highDays" => $highDays, "lowDays" => $lowDays);
-		//return round($highRateCharge + $lowRateCharge, 2);
-	} else {
-		$CUTOFF = $hours_cutoff * 4.0; //number of quarter hours until cutoff
-		//$totalDaySlots = $numQuarterHoursDay + $numQuarterHoursCancelModDay;
-		//$totalNightSlots = $numQuarterHoursNight + $numQuarterHoursCancelModNight;
-		//Only the first $cutoff slots are charged at highRate redistribute high and low slots
-		$highSlotsEvnt = min($numQuarterHoursDay, $CUTOFF);
-		$lowSlotsEvnt = $numQuarterHoursDay + $numQuarterHoursNight - $highSlotsEvnt;
-		
-		//do same for cancel and mod slots
-		$highSlotsCancelMod = min($CUTOFF - $highSlotsEvnt, $numQuarterHoursCancelModDay);
-		$lowSlotsCancelMod = $numQuarterHoursCancelModDay + $numQuarterHoursCancelModNight - $highSlotsCancelMod;
-		
-		//echo(" numLowRateSlots " . $numLowRateSlots/4 . " numHighRateSlots " . $numHighRateSlots/4 . " numQuarterHoursDay " . $numQuarterHoursDay/4 . "</br>");
-		$highRateCharge = (float) ($highSlotsEvnt + $highSlotsCancelMod) * $rateHigh/4.0;
-		$lowRateCharge =  (float) ($lowSlotsEvnt + $lowSlotsCancelMod) * $rateLow /4.0;
-		//$timeCharge = 0;
-		//echo("highSlots " . $highSlotsEvnt . " lowSlots " . $lowSlotsEvnt . " highCan " . $highSlotsCancelMod . 
-		//     " lowCan " . $lowSlotsCancelMod .  " lowRate " . $rateLow . " highRate ". $rateHigh . "<br>");
-		return array( "charge" => round($highRateCharge + $lowRateCharge, 2), 
-						"highSlots" => $highSlotsEvnt, 
-						"lowSlots" => $lowSlotsEvnt,
-						"highSlotsFromCancel" => $highSlotsCancelMod,
-						"lowSlotsFromCancel" => $lowSlotsCancelMod,
-						"highDays" => 0, "lowDays" => 0);
-	}
-} 
-
-
-function get_plan($totalDistance, $billing, $invoicable_id){
-	global $MEMBER_PLANS, $db;
-	
-	$query = "SELECT * from ".SQL_PREFIX."invoicables INNER JOIN ".SQL_PREFIX."grouptypes ON ".SQL_PREFIX."invoicables.type=".SQL_PREFIX."grouptypes.id WHERE ".SQL_PREFIX."invoicables.id=$invoicable_id";
-	$result = $db->Execute($query)
-		or db_error(_('Error in get_plan'), $query);
-	$myrow = $result->FetchRow();
-	
-	if ($myrow['type'] = 'INDIVIDUAL' || $myrow['force_user_member_plan'] == true){
-		if ($totalDistance < $billing['member_plan_low_cutoff']){
-			return $MEMBER_PLANS['LOW'];
-		} else if ($totalDistance < $billing['member_plan_med_cutoff']) {
-			return $MEMBER_PLANS['MED'];
-		} else {
-			return $MEMBER_PLANS['HIGH'];
-		}
-	} else {
-		return $MEMBER_PLANS['GROUP'];
 	}
 }
 

@@ -31,16 +31,31 @@
 			<?php echo $bookable['Bookable']['disabled']; ?>
 			&nbsp;
 		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('Hourly Rate Low'); ?></dt>
+		
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('Hourly Rate Low Member'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
 			<?php echo $bookable['Bookable']['hourly_rate_low']; ?>
 			&nbsp;
 		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('Hourly Rate High'); ?></dt>
+
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('Hourly Rate Low Casual'); ?></dt>
+		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
+			<?php echo $bookable['Bookable']['hourly_rate_low_casual']; ?>
+			&nbsp;
+		</dd>
+		
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('Hourly Rate High Member'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
 			<?php echo $bookable['Bookable']['hourly_rate_high']; ?>
 			&nbsp;
 		</dd>
+
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('Hourly Rate High Casual'); ?></dt>
+		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
+			<?php echo $bookable['Bookable']['hourly_rate_high_casual']; ?>
+			&nbsp;
+		</dd>
+		
 		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('Rate Cutoff'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
 			<?php echo $bookable['Bookable']['rate_cutoff']; ?>
@@ -61,17 +76,17 @@
 			<?php echo $bookable['Bookable']['daily_rate']; ?>
 			&nbsp;
 		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('Km Rate Low'); ?></dt>
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('Km Rate Member'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
 			<?php echo $bookable['Bookable']['km_rate_low']; ?>
 			&nbsp;
 		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('Km Rate Med'); ?></dt>
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('Km Rate NOT USED'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
 			<?php echo $bookable['Bookable']['km_rate_med']; ?>
 			&nbsp;
 		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('Km Rate High'); ?></dt>
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php echo __('Km Rate Casual'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
 			<?php echo $bookable['Bookable']['km_rate_high']; ?>
 			&nbsp;

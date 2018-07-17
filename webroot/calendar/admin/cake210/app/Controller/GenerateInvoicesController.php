@@ -137,9 +137,10 @@ class GenerateinvoicesController extends AppController{
 		$invText = tag("div");
 		$invIff = "";
 		
-		$outData = generate_invoice_for_user_or_group($month, $year, $invoicable_id, $transId, $invoiceNumber, $previousOwing, $paymentsMade, $billing, $invMemo, $invErrors);
-		$invText = skin_invoice_html($outData, $invErrors);
-		$invIff	 = skin_invoice_iif($outData, $invErrors);
+		invoiceGenerator$ = new GenerateInvoicesLocal();
+		$outData = invoiceGenerator$->generate_invoice_for_user_or_group($month, $year, $invoicable_id, $transId, $invoiceNumber, $previousOwing, $paymentsMade, $billing, $invMemo, $invErrors);
+		$invText = invoiceGenerator$->skin_invoice_html($outData, $invErrors);
+		$invIff	 = invoiceGenerator$->skin_invoice_iif($outData, $invErrors);
 		
 		$invText = add_html_wrapper( $invText, "Invoice $displayName " . month_name( $month ) . " $year" );
 

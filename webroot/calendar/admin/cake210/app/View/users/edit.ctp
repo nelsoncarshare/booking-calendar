@@ -20,6 +20,7 @@
 		echo $this->Form->input('disabled');
 		echo $this->Form->input('activated');
 		echo $this->Form->input('group_id');
+		echo $this->Form->input('is_member');
 		echo $this->Form->input('lastNoticeSentOn');
 		echo $this->Form->input('licenseExpiresOn');
 		echo $this->Form->input('Permission');

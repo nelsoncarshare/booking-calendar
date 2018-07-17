@@ -12,29 +12,6 @@ class BookablesController extends AppController {
     {
         $this->checkSession();
     }
-
-	/*
-	function export() 
-	{  
-		Configure::write('debug',0); 
-		$tableName = "Bookables";
-		$data = $this->Bookable->find('all', array($tableName => $tableName . ".id ASC",'contain' => false));
-		
-		$ks = array_keys($data[0][$tableName]);
-		
-		$headers1 = Array();
-		foreach ($ks as $value){
-			$headers1[] = $value;
-		}
-		
-		$headers = array($tableName=> $headers1); 
-		
-		array_unshift($data,$headers); 
-		
-		$this->set(compact('data')); 
-		$this->set('tableName', $tableName);
-	} 
-	*/
 	
 	function export(){
 		$this->response->download("export.csv");

@@ -11,7 +11,9 @@
 			<th><?php echo $this->Paginator->sort('color');?></th>
 			<th><?php echo $this->Paginator->sort('disabled');?></th>
 			<th><?php echo $this->Paginator->sort('hourly_rate_low');?></th>
+			<th><?php echo $this->Paginator->sort('hourly_rate_low_casual');?></th>
 			<th><?php echo $this->Paginator->sort('hourly_rate_high');?></th>
+			<th><?php echo $this->Paginator->sort('hourly_rate_high_casual');?></th>
 			<th><?php echo $this->Paginator->sort('rate_cutoff');?></th>
 			<th><?php echo $this->Paginator->sort('is_flat_daily_rate');?></th>
 			<th><?php echo $this->Paginator->sort('daily_rate_low');?></th>
@@ -48,7 +50,9 @@
 		<td><?php echo $bookable['Bookable']['color']; ?>&nbsp;</td>
 		<td><?php echo $bookable['Bookable']['disabled']; ?>&nbsp;</td>
 		<td><?php echo $bookable['Bookable']['hourly_rate_low']; ?>&nbsp;</td>
+		<td><?php echo $bookable['Bookable']['hourly_rate_low_casual']; ?>&nbsp;</td>
 		<td><?php echo $bookable['Bookable']['hourly_rate_high']; ?>&nbsp;</td>
+		<td><?php echo $bookable['Bookable']['hourly_rate_high_casual']; ?>&nbsp;</td>
 		<td><?php echo $bookable['Bookable']['rate_cutoff']; ?>&nbsp;</td>
 		<td><?php echo $bookable['Bookable']['is_flat_daily_rate']; ?>&nbsp;</td>
 		<td><?php echo $bookable['Bookable']['daily_rate_low']; ?>&nbsp;</td>

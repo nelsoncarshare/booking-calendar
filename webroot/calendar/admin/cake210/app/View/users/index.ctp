@@ -35,6 +35,7 @@
 			<th><?php echo $this->Paginator->sort('modified');?></th>
 			<th><?php echo $this->Paginator->sort('activated');?></th>
 			<th><?php echo $this->Paginator->sort('group_id');?></th>
+			<th><?php echo $this->Paginator->sort('is_member');?></th>
 			<th><?php echo $this->Paginator->sort('lastNoticeSentOn');?></th>
 
 	</tr>
@@ -65,10 +66,12 @@
 		<td><?php echo $user['User']['postalcode']; ?>&nbsp;</td>
 		<td><?php echo $user['User']['disabled']; ?>&nbsp;</td>
 		<td><?php echo $user['User']['created']; ?>&nbsp;</td>
+		<td><?php echo $user['User']['activated']; ?>&nbsp;</td>
 		<td><?php echo $user['User']['modified']; ?>&nbsp;</td>
 		<td>
 			<?php echo $this->Html->link($user['Group']['grp_displayname'], array('controller' => 'groups', 'action' => 'view', $user['Group']['id'])); ?>
 		</td>
+		<td><?php echo $user['User']['is_member']; ?>&nbsp;</td>
 		<td><?php echo $user['User']['lastNoticeSentOn']; ?>&nbsp;</td>
 	</tr>
 <?php endforeach; ?>

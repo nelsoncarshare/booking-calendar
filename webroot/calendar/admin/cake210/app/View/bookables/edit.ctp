@@ -10,7 +10,9 @@
 		echo $this->Form->input('color');
 		echo $this->Form->input('disabled');
 		echo $this->Form->input('hourly_rate_low');
+		echo $this->Form->input('hourly_rate_low_casual');
 		echo $this->Form->input('hourly_rate_high');
+		echo $this->Form->input('hourly_rate_high_casual');
 		echo $this->Form->input('rate_cutoff');
 		echo $this->Form->input('is_flat_daily_rate');
 		echo $this->Form->input('daily_rate_low');

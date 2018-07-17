@@ -146,9 +146,10 @@ function generate_invoices_rpt() {
 				$invIff = "";
 				$invErrors = tag("div");
 				
-				$outData = generate_invoice_for_user_or_group($month, $year, $vars[ $i], $transId, $invoiceNumber, $previousOwing, $paymentsMade, $billing, $invMemo, $invErrors);
-				$invText = skin_invoice_html($outData, $invErrors);
-				$invIff	 = skin_invoice_iif($outData, $invErrors);
+				$invoiceGenerator = new GenerateInvoicesLocal()
+				$outData = $invoiceGenerator->generate_invoice_for_user_or_group($month, $year, $vars[ $i], $transId, $invoiceNumber, $previousOwing, $paymentsMade, $billing, $invMemo, $invErrors);
+				$invText = $invoiceGenerator->skin_invoice_html($outData, $invErrors);
+				$invIff	 = $invoiceGenerator->skin_invoice_iif($outData, $invErrors);
 				
 				$invText = add_html_wrapper( $invText, "Invoice $displayName " . month_name( $month ) . " $year" );
 				
