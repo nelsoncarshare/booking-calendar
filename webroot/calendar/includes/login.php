@@ -47,7 +47,7 @@ function get_permissions($id){
 
 function login()
 {
-	global $calendar_name, $vars, $day, $month, $year, $phpc_script, $db, $OPERATION;
+	global $calendar_name, $vars, $day, $month, $year, $phpc_script, $db, $OPERATION, $CANCELED;
 
 	$html = tag('div');
 
@@ -78,8 +78,8 @@ function login()
 					if (is_allowed_permission_checkpoint('CAKE_LOGIN')){
 						cake_login($_SESSION);
 					}
-
-					insert_to_event_log(-1,$_SESSION['uid'],$OPERATION['LOGIN'],-1,$db->DBDate(date("Y-m-d H:i:s", time())),$db->DBDate(date("Y-m-d H:i:s", time())),"","",-1,$CANCELED['NORMAL'], "");
+					//echo("aa " . $CANCELED['NORMAL']);
+					insert_to_event_log(-1,$_SESSION['uid'],$OPERATION['LOGIN'],-1,$db->DBDate(date("Y-m-d H:i:s", time())),$db->DBDate(date("Y-m-d H:i:s", time())),"","",-1,$CANCELED['NORMAL'], 0);
 
                     $selCal = $vars['calendar'];
                     setcookie("CAKEPHP", $selCal, time()+3600*24*48);

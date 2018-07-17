@@ -12,7 +12,7 @@ MySQL - 5.6.38 : Database - booking_calendar
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-USE `nelsonc_carshre`;
+USE `nelsonc_carshare`;
 
 /*Table structure for table `phpc_announcementdates` */
 
