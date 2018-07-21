@@ -2,14 +2,14 @@
 //CakePlugin::load('CsvView');
 
 global $SQL_PREFIX, $CANCELED, $EVENT_TYPE_BOOKING, $GROUP_FOR_INDIVIDUALS, $TAX_CODES, $OPERATION, $MEMBER_PLANS, $HOURS_CUTOFF, $ORGANIZATION_NAME, $ADMIN_EMAIL, $INVOICE_ADDRESS;
-global $LIGHT_ROW_COLOR, $DARK_ROW_COLOR, $CALENDAR_ROOT, $GOOGLE_MAPS_API_KEY;
+global $LIGHT_ROW_COLOR, $DARK_ROW_COLOR, $CALENDAR_ROOT, $GOOGLE_MAPS_API_KEY, $VEHICLE_LABEL;
 
 date_default_timezone_set('Canada/Pacific');
 
 define('SQL_HOST',     'localhost');
 define('SQL_USER',     'root');
 define('SQL_PASSWD',   'bingo123');
-define('SQL_DATABASE', 'nelsonc_carshre');
+define('SQL_DATABASE', 'nelsonc_carshare');
 define('SQL_PREFIX',   'phpc_');
 define('SQL_TYPE',     'mysqli');
 
@@ -20,6 +20,7 @@ define('GOOGLE_MAPS_API_KEY1', 'ABQIAAAAk0n9TBAUpGw6Bnr5n1vPkRQkm_5lpumf1IOMviWL
 $ORGANIZATION_NAME = "Kootenay Carshare Coop";
 $ADMIN_EMAIL = "carsharecoop@gmail.com";
 $INVOICE_ADDRESS = "Suite 310, 622 Front St. &nbsp;&nbsp;Nelson, BC, &nbsp;&nbsp;V1L 4B7";
+$VEHICLE_LABEL = "volunteer";
 $USER_GUIDE_URL = 'http://www.carsharecoop.ca/how-it-works/';
 $GOOGLE_MAPS_API_KEY = Array('nelsoncar.com' => 'ABQIAAAAk0n9TBAUpGw6Bnr5n1vPkRTl6f1iR-bEtr-8QU6UrPAJah2JsBQpIG5pe-daCV92UQT-vDERP0CJFg', 'carsharecoop.ca' => 'ABQIAAAAk0n9TBAUpGw6Bnr5n1vPkRT3Sed5rwkTZDzgqWbfV3qgL9tp0RRbYGbshBXFC2rjwrUr27WPvCogJw', 'carsharecoop.com' =>'ABQIAAAAk0n9TBAUpGw6Bnr5n1vPkRT5EjKub4eRDenpQfycG2ZTzYNRBxT7Pu-GXrdTlerG5ge3ATEIyt_gfw');
 							
@@ -51,6 +52,7 @@ $MEMBER_PLANS['LOW'] = 1;
 $MEMBER_PLANS['MED'] = 2;
 $MEMBER_PLANS['HIGH'] = 3;
 $MEMBER_PLANS['GROUP'] = 4;
+$MEMBER_PLANS['NON_MEMBER'] = 5;
 
 $EVENT_TYPE_BOOKING = 1;
 $EVENT_TYPE_RESERVATION = 2;

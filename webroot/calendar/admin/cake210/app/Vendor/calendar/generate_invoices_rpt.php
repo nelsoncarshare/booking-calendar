@@ -146,7 +146,7 @@ function generate_invoices_rpt() {
 				$invIff = "";
 				$invErrors = tag("div");
 				
-				$invoiceGenerator = new GenerateInvoicesLocal()
+				$invoiceGenerator = new GenerateInvoicesLocal();
 				$outData = $invoiceGenerator->generate_invoice_for_user_or_group($month, $year, $vars[ $i], $transId, $invoiceNumber, $previousOwing, $paymentsMade, $billing, $invMemo, $invErrors);
 				$invText = $invoiceGenerator->skin_invoice_html($outData, $invErrors);
 				$invIff	 = $invoiceGenerator->skin_invoice_iif($outData, $invErrors);

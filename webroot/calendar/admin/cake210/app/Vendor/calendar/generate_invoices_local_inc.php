@@ -292,30 +292,25 @@ class GenerateInvoicesLocal{
 				);	
 		return $outStr;
 	}
-
+	
 	function get_plan($totalDistance, $billing, $invoicable_id){
 		global $MEMBER_PLANS, $db;
 		
 		$query = "SELECT * from ".SQL_PREFIX."invoicables INNER JOIN ".SQL_PREFIX."grouptypes ON ".SQL_PREFIX."invoicables.type=".SQL_PREFIX."grouptypes.id WHERE ".SQL_PREFIX."invoicables.id=$invoicable_id";
 		$result = $db->Execute($query)
 			or db_error(_('Error in get_plan'), $query);
-		$myrow = $result->FetchRow();
+		$invoicableRow = $result->FetchRow();
 		
-		if ($myrow['is_member'] == FALSE){
-			echo "alpha";
-			return $MEMBER_PLANS['HIGH'];
-		} else if ($myrow['type'] == 'INDIVIDUAL' || $myrow['force_user_member_plan'] == true){
-			echo "beta";
-			return $MEMBER_PLANS['LOW'];
-			/*
-			if ($totalDistance < $billing['member_plan_low_cutoff']){
+		if ($invoicableRow['type'] == 'INDIVIDUAL' || $invoicableRow['force_user_member_plan'] == true){
+			$query = "SELECT * from ".SQL_PREFIX."users WHERE ".SQL_PREFIX."users.id=" . $invoicableRow['user_id'];
+			$result = $db->Execute($query)
+				or db_error(_('Error in get_plan'), $query);
+			$userRow = $result->FetchRow();
+			if ($userRow['is_member'] == TRUE){
 				return $MEMBER_PLANS['LOW'];
-			} else if ($totalDistance < $billing['member_plan_med_cutoff']) {
-				return $MEMBER_PLANS['MED'];
 			} else {
 				return $MEMBER_PLANS['HIGH'];
 			}
-			*/
 		} else {
 			return $MEMBER_PLANS['GROUP'];
 		}
@@ -336,17 +331,17 @@ class GenerateInvoicesLocal{
 	function skin_invoice_iif($outData, &$outErrors){
 		$chartofaccounts = get_chartofaccounts();
 		$outIff = get_IIF_header_rows();
-		validate_IIF_header_rows( lookupInChartOfAccounts($chartofaccounts, $outData['invoice_for']['acnt_code_customer'], "acnt_code_customer", $outErrors), $outData['billing_info'], $outErrors);
+		$this->validate_IIF_header_rows( $this->lookupInChartOfAccounts($chartofaccounts, $outData['invoice_for']['acnt_code_customer'], "acnt_code_customer", $outErrors), $outData['billing_info'], $outErrors);
 		$invDateArray = explode("-", $outData['billing_info']["invoice_date"]);
 		$invDueDateArray = explode("-", $outData['billing_info']["invoice_due_date"]);
 		
 		$invType = "";
 		if($outData['invoice_total'] >= 0){
 			$invType = "INVOICE";
-			$outIff .= "TRNS\t" . $outData['transaction_id'] . "\t$invType\t" . $invDateArray[1] . "/" . $invDateArray[2] . "/" . $invDateArray[0] . "\t" . lookupInChartOfAccounts($chartofaccounts, $outData['billing_info']["acnt_new_accounts_receivable"], "acnt_new_accounts_receivable", $outErrors) . "\t" . lookupInChartOfAccounts($chartofaccounts, $outData['invoice_for']['acnt_code_customer'], 'acnt_code_customer', $outErrors) . "\t" . number_format($outData['invoice_total'] ,2, ".", "") . "\t" . $outData['invoice_num'] . "\t" . $outData['memo'] . "\t". $outData['invoice_for']['address1'] ."\t" . $outData['invoice_for']['address2'] . "\t" . $outData['invoice_for']['city'] . " " . $outData['invoice_for']['province'] . "\t\t" . $invDueDateArray[1] . "/" . $invDueDateArray[2] . "/" . $invDueDateArray[0] . "\tVehicle Usage " . month_name($outData['billing_info']['month']) . " " . $outData['billing_info']['year'] . "\t" . $outData['memo'] . "\n";
+			$outIff .= "TRNS\t" . $outData['transaction_id'] . "\t$invType\t" . $invDateArray[1] . "/" . $invDateArray[2] . "/" . $invDateArray[0] . "\t" . $this->lookupInChartOfAccounts($chartofaccounts, $outData['billing_info']["acnt_new_accounts_receivable"], "acnt_new_accounts_receivable", $outErrors) . "\t" . $this->lookupInChartOfAccounts($chartofaccounts, $outData['invoice_for']['acnt_code_customer'], 'acnt_code_customer', $outErrors) . "\t" . number_format($outData['invoice_total'] ,2, ".", "") . "\t" . $outData['invoice_num'] . "\t" . $outData['memo'] . "\t". $outData['invoice_for']['address1'] ."\t" . $outData['invoice_for']['address2'] . "\t" . $outData['invoice_for']['city'] . " " . $outData['invoice_for']['province'] . "\t\t" . $invDueDateArray[1] . "/" . $invDueDateArray[2] . "/" . $invDueDateArray[0] . "\tVehicle Usage " . month_name($outData['billing_info']['month']) . " " . $outData['billing_info']['year'] . "\t" . $outData['memo'] . "\n";
 		} else {
 			$invType = "CREDIT MEMO";
-			$outIff .= "TRNS\t" . $outData['transaction_id'] . "\t$invType\t" . $invDateArray[1] . "/" . $invDateArray[2] . "/" . $invDateArray[0] . "\t" . lookupInChartOfAccounts($chartofaccounts, $outData['billing_info']["acnt_new_accounts_receivable"], "acnt_new_accounts_receivable", $outErrors) . "\t" . lookupInChartOfAccounts($chartofaccounts, $outData['invoice_for']['acnt_code_customer'], 'acnt_code_customer', $outErrors) . "\t" . number_format($outData['invoice_total'] ,2, ".", "") . "\t" . $outData['invoice_num'] . "\t" . $outData['memo'] . "\t". $outData['invoice_for']['address1'] ."\t" . $outData['invoice_for']['address2'] . "\t" . $outData['invoice_for']['city'] . " " . $outData['invoice_for']['province'] . "\t\t" . $invDueDateArray[1] . "/" . $invDueDateArray[2] . "/" . $invDueDateArray[0] . "\tVehicle Usage " . month_name($outData['billing_info']['month']) . " " . $outData['billing_info']['year'] . "\t" . $outData['memo'] . "\n";
+			$outIff .= "TRNS\t" . $outData['transaction_id'] . "\t$invType\t" . $invDateArray[1] . "/" . $invDateArray[2] . "/" . $invDateArray[0] . "\t" . $this->lookupInChartOfAccounts($chartofaccounts, $outData['billing_info']["acnt_new_accounts_receivable"], "acnt_new_accounts_receivable", $outErrors) . "\t" . $this->lookupInChartOfAccounts($chartofaccounts, $outData['invoice_for']['acnt_code_customer'], 'acnt_code_customer', $outErrors) . "\t" . number_format($outData['invoice_total'] ,2, ".", "") . "\t" . $outData['invoice_num'] . "\t" . $outData['memo'] . "\t". $outData['invoice_for']['address1'] ."\t" . $outData['invoice_for']['address2'] . "\t" . $outData['invoice_for']['city'] . " " . $outData['invoice_for']['province'] . "\t\t" . $invDueDateArray[1] . "/" . $invDueDateArray[2] . "/" . $invDueDateArray[0] . "\tVehicle Usage " . month_name($outData['billing_info']['month']) . " " . $outData['billing_info']['year'] . "\t" . $outData['memo'] . "\n";
 		}
 		//done generating header, generate rows 
 
@@ -365,69 +360,69 @@ class GenerateInvoicesLocal{
 				echo "eeff " . $value['hour_rate'];
 				echo "gghh " . $value['hours_item_name'];
 				*/
-				$outIff .= "SPL\t$spl\t$invType\t" . lookupInChartOfAccounts($chartofaccounts,$value['acnt_new_code_hours'], 'acnt_new_code_hours', $outErrors) . "\t\t-" . number_format($value['time_charge'],2, ".", "") . "\t" . $value['comment'] . "\t-" . $value['hours'] . "\t" . $value['hour_rate'] . "\t" . $value['hours_item_name'] . "\n";
-				$outIff .= "SPL\t" . ($spl + 1) . "\t$invType\t" . lookupInChartOfAccounts($chartofaccounts,$value['acnt_new_name_km'], 'acnt_new_name_km', $outErrors)   .  "\t\t-" . number_format($value['km_charge'],2, ".", "") .   "\t" . $value['comment'] . "\t-" . $value['distance'] . "\t" . $value['km_rate'] . "\t" . $value['km_item_name'] . "\n";    	
+				$outIff .= "SPL\t$spl\t$invType\t" . $this->lookupInChartOfAccounts($chartofaccounts,$value['acnt_new_code_hours'], 'acnt_new_code_hours', $outErrors) . "\t\t-" . number_format($value['time_charge'],2, ".", "") . "\t" . $value['comment'] . "\t-" . $value['hours'] . "\t" . $value['hour_rate'] . "\t" . $value['hours_item_name'] . "\n";
+				$outIff .= "SPL\t" . ($spl + 1) . "\t$invType\t" . $this->lookupInChartOfAccounts($chartofaccounts,$value['acnt_new_name_km'], 'acnt_new_name_km', $outErrors)   .  "\t\t-" . number_format($value['km_charge'],2, ".", "") .   "\t" . $value['comment'] . "\t-" . $value['distance'] . "\t" . $value['km_rate'] . "\t" . $value['km_item_name'] . "\n";    	
 				$spl += 2;
 			}
 		}
 
 		foreach ($outData['summary_rows'] as $i => $r) {
 			if ($r['value'] != 0){
-				validate_summary_row($r, $outErrors);
-				$outIff .= "SPL\t$spl\t$invType\t" . lookupInChartOfAccounts($chartofaccounts,$r['acnt_code'], $r['name'], $outErrors) . "\t" . $r['name'] . "\t" . number_format(- $r['value'],2, ".", "") . "\t" . $r['comment'] . "\t\t\t" . $r['item'] . "\n";
+				$this->validate_summary_row($r, $outErrors);
+				$outIff .= "SPL\t$spl\t$invType\t" . $this->lookupInChartOfAccounts($chartofaccounts,$r['acnt_code'], $r['name'], $outErrors) . "\t" . $r['name'] . "\t" . number_format(- $r['value'],2, ".", "") . "\t" . $r['comment'] . "\t\t\t" . $r['item'] . "\n";
 				$spl ++;
 			}
 		}
 
-		validate_summary_row($outData['member_plan_row'], $outErrors);
-		$outIff .= "SPL\t$spl\t$invType\t" . lookupInChartOfAccounts($chartofaccounts,$outData['member_plan_row']['acnt_code'], "member_plan_row", $outErrors) . "\t" . $outData['member_plan_row']['name'] . "\t" . number_format(- $outData['member_plan_row']['value'],2, ".", "") . "\t" . $outData['member_plan_row']['comment'] . "\t\t\t" . $outData['member_plan_row']['item'] . "\n";
+		$this->validate_summary_row($outData['member_plan_row'], $outErrors);
+		$outIff .= "SPL\t$spl\t$invType\t" . $this->lookupInChartOfAccounts($chartofaccounts,$outData['member_plan_row']['acnt_code'], "member_plan_row", $outErrors) . "\t" . $outData['member_plan_row']['name'] . "\t" . number_format(- $outData['member_plan_row']['value'],2, ".", "") . "\t" . $outData['member_plan_row']['comment'] . "\t\t\t" . $outData['member_plan_row']['item'] . "\n";
 		$spl ++;
 		
 		if ($outData['pst_row']['value'] != 0){
-			validate_summary_row($outData['pst_row'], $outErrors);
-			$outIff .= "SPL\t$spl\t$invType\t" . lookupInChartOfAccounts($chartofaccounts,$outData['pst_row']['acnt_code'], "PST row", $outErrors) . "\t" . $outData['pst_row']['name'] . "\t" . number_format(- $outData['pst_row']['value'],2, ".", "") . "\t" . $outData['pst_row']['comment'] . "\t\t\t" . $outData['pst_row']['item'] . "\n";
+			$this->validate_summary_row($outData['pst_row'], $outErrors);
+			$outIff .= "SPL\t$spl\t$invType\t" . $this->lookupInChartOfAccounts($chartofaccounts,$outData['pst_row']['acnt_code'], "PST row", $outErrors) . "\t" . $outData['pst_row']['name'] . "\t" . number_format(- $outData['pst_row']['value'],2, ".", "") . "\t" . $outData['pst_row']['comment'] . "\t\t\t" . $outData['pst_row']['item'] . "\n";
 			$spl ++;
 		}
 
 		if ($outData['rental_tax_row']['value'] != 0){
-			validate_summary_row($outData['rental_tax_row'], $outErrors);
-			$outIff .= "SPL\t$spl\t$invType\t" . lookupInChartOfAccounts($chartofaccounts,$outData['rental_tax_row']['acnt_code'], "rental tax", $outErrors) . "\t" . $outData['rental_tax_row']['name'] . "\t" . number_format(- $outData['rental_tax_row']['value'],2, ".", "") . "\t" . $outData['rental_tax_row']['comment'] . "\t\t\t" . $outData['rental_tax_row']['item'] . "\n";
+			$this->validate_summary_row($outData['rental_tax_row'], $outErrors);
+			$outIff .= "SPL\t$spl\t$invType\t" . $this->lookupInChartOfAccounts($chartofaccounts,$outData['rental_tax_row']['acnt_code'], "rental tax", $outErrors) . "\t" . $outData['rental_tax_row']['name'] . "\t" . number_format(- $outData['rental_tax_row']['value'],2, ".", "") . "\t" . $outData['rental_tax_row']['comment'] . "\t\t\t" . $outData['rental_tax_row']['item'] . "\n";
 			$spl ++;
 		}	
 		
 		if ($outData['gst_row']['value'] != 0){
-			validate_summary_row($outData['gst_row'], $outErrors);
-			$outIff .= "SPL\t$spl\t$invType\t" . lookupInChartOfAccounts($chartofaccounts,$outData['gst_row']['acnt_code'], "GST row", $outErrors) . "\t" . $outData['gst_row']['name'] . "\t" . number_format(- $outData['gst_row']['value'],2, ".", "") . "\t" . $outData['gst_row']['comment'] . "\t\t\t" . $outData['gst_row']['item'] . "\n";
+			$this->validate_summary_row($outData['gst_row'], $outErrors);
+			$outIff .= "SPL\t$spl\t$invType\t" . $this->lookupInChartOfAccounts($chartofaccounts,$outData['gst_row']['acnt_code'], "GST row", $outErrors) . "\t" . $outData['gst_row']['name'] . "\t" . number_format(- $outData['gst_row']['value'],2, ".", "") . "\t" . $outData['gst_row']['comment'] . "\t\t\t" . $outData['gst_row']['item'] . "\n";
 			$spl ++;
 		}
 		
 		if ($outData['carbon_offset_row']['value'] != 0){
-			validate_summary_row($outData['carbon_offset_row'], $outErrors);
-			$outIff .= "SPL\t$spl\t$invType\t" . lookupInChartOfAccounts($chartofaccounts,$outData['carbon_offset_row']['acnt_code'], "carbon offset", $outErrors) . "\t" . $outData['carbon_offset_row']['name'] . "\t" . number_format(- $outData['carbon_offset_row']['value'],2, ".", "") . "\t" . $outData['carbon_offset_row']['comment'] . "\t\t\t" . $outData['carbon_offset_row']['item'] . "\n";
+			$this->validate_summary_row($outData['carbon_offset_row'], $outErrors);
+			$outIff .= "SPL\t$spl\t$invType\t" . $this->lookupInChartOfAccounts($chartofaccounts,$outData['carbon_offset_row']['acnt_code'], "carbon offset", $outErrors) . "\t" . $outData['carbon_offset_row']['name'] . "\t" . number_format(- $outData['carbon_offset_row']['value'],2, ".", "") . "\t" . $outData['carbon_offset_row']['comment'] . "\t\t\t" . $outData['carbon_offset_row']['item'] . "\n";
 			$spl ++;
 		}
 
 		if ($outData['self_insurace_row']['value'] != 0){
-			validate_summary_row($outData['self_insurace_row'], $outErrors);
-			$outIff .= "SPL\t$spl\t$invType\t" . lookupInChartOfAccounts($chartofaccounts, $outData['self_insurace_row']['acnt_code'], "self insurance", $outErrors) . "\t" . $outData['self_insurace_row']['name'] . "\t" . number_format(- $outData['self_insurace_row']['value'],2, ".", "") . "\t" . $outData['self_insurace_row']['comment'] . "\t\t\t" . $outData['self_insurace_row']['item'] . "\n";
+			$this->validate_summary_row($outData['self_insurace_row'], $outErrors);
+			$outIff .= "SPL\t$spl\t$invType\t" . $this->lookupInChartOfAccounts($chartofaccounts, $outData['self_insurace_row']['acnt_code'], "self insurance", $outErrors) . "\t" . $outData['self_insurace_row']['name'] . "\t" . number_format(- $outData['self_insurace_row']['value'],2, ".", "") . "\t" . $outData['self_insurace_row']['comment'] . "\t\t\t" . $outData['self_insurace_row']['item'] . "\n";
 			$spl ++;
 		}
 		
 		if ($outData['interest_row']['value'] != 0){
-			validate_summary_row($outData['interest_row'], $outErrors);
-			$outIff .= "SPL\t$spl\t$invType\t" . lookupInChartOfAccounts($chartofaccounts, $outData['interest_row']['acnt_code'], "interest", $outErrors) . "\t" . $outData['interest_row']['name'] . "\t" . number_format(- $outData['interest_row']['value'],2, ".", "") . "\t" . $outData['interest_row']['comment'] . "\t\t\t" . $outData['interest_row']['item'] . "\n";
+			$this->validate_summary_row($outData['interest_row'], $outErrors);
+			$outIff .= "SPL\t$spl\t$invType\t" . $this->lookupInChartOfAccounts($chartofaccounts, $outData['interest_row']['acnt_code'], "interest", $outErrors) . "\t" . $outData['interest_row']['name'] . "\t" . number_format(- $outData['interest_row']['value'],2, ".", "") . "\t" . $outData['interest_row']['comment'] . "\t\t\t" . $outData['interest_row']['item'] . "\n";
 			$spl ++;
 		}
 
 	//	if ($outData['long_term_discount_row'] && $outData['long_term_discount_row'] != 0){
 	//		validate_summary_row($outData['long_term_discount_row'], $outErrors);
-	//		$outIff .= "SPL\t$spl\t$invType\t" . lookupInChartOfAccounts($chartofaccounts,$outData['long_term_discount_row']['acnt_code'], "long term discount", $outErrors) . "\t" . $outData['long_term_discount_row']['name'] . "\t" . number_format(- $outData['long_term_discount_row']['value'],2, ".", "") . "\t" . $outData['long_term_discount_row']['comment'] . "\t\t\t" . $outData['long_term_discount_row']['item'] . "\n";
+	//		$outIff .= "SPL\t$spl\t$invType\t" . $this->lookupInChartOfAccounts($chartofaccounts,$outData['long_term_discount_row']['acnt_code'], "long term discount", $outErrors) . "\t" . $outData['long_term_discount_row']['name'] . "\t" . number_format(- $outData['long_term_discount_row']['value'],2, ".", "") . "\t" . $outData['long_term_discount_row']['comment'] . "\t\t\t" . $outData['long_term_discount_row']['item'] . "\n";
 	//	    $spl ++;
 	//	}
 
 		foreach ($outData['expense_rows'] as $i => $r) {
-			validate_summary_row($r, $outErrors);
-			$outIff .= "SPL\t$spl\t$invType\t" . lookupInChartOfAccounts($chartofaccounts,$r['acnt_code'], $r["item"], $outErrors) . "\t\t" . number_format(- $r['value'],2, ".", "") . "\t" . $r['comment'] . "\t\t\t" . $r['item'] . "\n";
+			$this->validate_summary_row($r, $outErrors);
+			$outIff .= "SPL\t$spl\t$invType\t" . $this->lookupInChartOfAccounts($chartofaccounts,$r['acnt_code'], $r["item"], $outErrors) . "\t\t" . number_format(- $r['value'],2, ".", "") . "\t" . $r['comment'] . "\t\t\t" . $r['item'] . "\n";
 			$spl ++;
 		}				
 					

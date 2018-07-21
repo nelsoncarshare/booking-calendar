@@ -137,10 +137,11 @@ class GenerateinvoicesController extends AppController{
 		$invText = tag("div");
 		$invIff = "";
 		
-		invoiceGenerator$ = new GenerateInvoicesLocal();
-		$outData = invoiceGenerator$->generate_invoice_for_user_or_group($month, $year, $invoicable_id, $transId, $invoiceNumber, $previousOwing, $paymentsMade, $billing, $invMemo, $invErrors);
-		$invText = invoiceGenerator$->skin_invoice_html($outData, $invErrors);
-		$invIff	 = invoiceGenerator$->skin_invoice_iif($outData, $invErrors);
+		
+		$invoiceGenerator = new GenerateInvoicesLocal();
+		$outData = $invoiceGenerator->generate_invoice_for_user_or_group($month, $year, $invoicable_id, $transId, $invoiceNumber, $previousOwing, $paymentsMade, $billing, $invMemo, $invErrors);
+		$invText = $invoiceGenerator->skin_invoice_html($outData, $invErrors);
+		$invIff	 = $invoiceGenerator->skin_invoice_iif($outData, $invErrors);
 		
 		$invText = add_html_wrapper( $invText, "Invoice $displayName " . month_name( $month ) . " $year" );
 
@@ -161,7 +162,8 @@ class GenerateinvoicesController extends AppController{
 			write_text_to_file(USER_HOME . "invoicables/", "_ALL_USERS" , get_invoice_file_name( $month, $year, "ALL") . ".iif", $invIff, 'a');	    
 
 		}
-						
+				
+					
 		$newInvoiceNumber ++;
 		$transId ++;
 

@@ -47,7 +47,6 @@ function get_invoicable_info($invoicable_id){
 	             ", ".SQL_PREFIX."invoicables.user_id ".
 	             ", ".SQL_PREFIX."invoicables.group_id ".
 	             ", ".SQL_PREFIX."invoicables.force_user_member_plan ".
-				 ", ".SQL_PREFIX."invoicables.is_member ".
 	             ", ".SQL_PREFIX."grouptypes.type as type".
 	             ", ".SQL_PREFIX."users.displayname ".
 	             ", ".SQL_PREFIX."users.disabled ".
