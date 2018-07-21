@@ -20,20 +20,36 @@ function list_users() {
 	$result = get_users();
 	if ($row1 = $result->FetchRow()) {
 		for (; $row1; $row1 = $result->FetchRow()) {
-			$tbody->add(
-							tag("tr", tag("td",
-										tag("b",$row1['displayname']),
-										tag("br"),
-										tag("blockquote",
-											_(" " . $row1['username'] . "<br/>" ),
-											_(" " . $row1['address1'] . "<br/>"),
-											_(" " . $row1['address2'] . "<br/>"),
-											_(" " . $row1['city'] . " " . $row1['province'] . " " . $row1['postalcode'] . "<br/>"),
-											_(" " . $row1['phone'] . " " . $row1['email'] . "<br/>")
-										)
+			if(is_allowed_permission_checkpoint("DISPLAY_ADMIN_LINK") ||
+			   is_allowed_permission_checkpoint("DISPLAY_ADMIN_BOOKINGS_L")) {
+				$tbody->add(
+					tag("tr", tag("td",
+									tag("b",$row1['displayname']),
+									tag("br"),
+									tag("blockquote",
+										_(" " . $row1['username'] . "<br/>" ),
+													
+										_(" " . $row1['address1'] . "<br/>"),
+										_(" " . $row1['address2'] . "<br/>"),
+										_(" " . $row1['city'] . " " . $row1['province'] . " " . $row1['postalcode'] . "<br/>"),
+									
+										_(" " . $row1['phone'] . " " . $row1['email'] . "<br/>")
 									)
-							)
-						);
+								)
+						)
+					);
+			} else {
+				$tbody->add(
+					tag("tr", tag("td",
+									tag("b",$row1['displayname']),
+									tag("br"),
+									tag("blockquote",									
+										_(" " . $row1['phone'] . " " . $row1['email'] . "<br/>")
+									)
+								)
+						)
+					);			
+			}				
 		}
 	}	
 	
