@@ -78,8 +78,6 @@ if(!$db->Connect(SQL_HOST, SQL_USER, SQL_PASSWD, SQL_DATABASE)) {
 Synch_DB_Timezone_With_PHP($db);
 
 
-
-
 // Create vars
 foreach($_GET as $key => $value) {
 	if(!get_magic_quotes_gpc())
@@ -98,8 +96,6 @@ foreach($_POST as $key => $value) {
 // Load configuration
 if(!empty($vars['calendar_name'])) {
 	$calendar_name = $vars['calendar_name'];
-} else {
-	$calendar_name = 0;
 }
 
 $query = "SELECT * from " . SQL_PREFIX .
