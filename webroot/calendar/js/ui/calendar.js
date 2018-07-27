@@ -752,7 +752,7 @@ Calendar.loadContentAjax = function(url){
 	/*if(typeof window.arrayContent[url] == 'undefined')
 	{*/
 		$.ajax({
-			url: 'http://' + window.location.host + window.location.pathname + url,
+			url: 'http://' + window.location.host + url,
 			type: "POST",
 			dataType: "html",
 			success: function (data) { 
