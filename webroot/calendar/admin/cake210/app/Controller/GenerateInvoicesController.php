@@ -1,7 +1,7 @@
 <?php
 App::uses('AppController', 'Controller');
 
-require_once(App::path('Vendor')[0] . 'adodb/adodb.inc.php');
+require_once(APP . 'Vendor' . DS . 'adodb/adodb.inc.php');
 		App::import('Vendor','calendar/setup');
 		App::import('Vendor','calendar/html');
 		App::import('Vendor','calendar/url_match');

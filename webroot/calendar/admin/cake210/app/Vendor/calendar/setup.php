@@ -50,8 +50,8 @@ $phpc_protocol = "http";
 //if($_SERVER["HTTPS"] == "on") $phpc_protocol = "https";
 //else 
 $phpc_server = $_SERVER['HTTP_HOST'];
-$phpc_url = "$phpc_protocol://$phpc_server$phpc_script?"
-	. $_SERVER['QUERY_STRING'];
+$phpc_url = "$phpc_protocol://$phpc_server$phpc_script?";
+//	. $_SERVER['QUERY_STRING'];
 
 
 
