@@ -1,9 +1,9 @@
 <div>
-<div align="center"><?php echo $html->link('[Back To Admin]', '/staticpages/'); ?></div>
+<div align="center"><?php echo $this->Html->link('[Back To Admin]', '/staticpages/'); ?></div>
 
-<?php echo $html->css('themes/sand/grid'); ?>
+<?php echo $this->Html->css('themes/sand/grid'); ?>
 
-<?php echo $html->css('jqModal'); ?>
+<?php echo $this->Html->css('jqModal'); ?>
 
 <!-- Of course we should load the jquery library -->
 <?php echo $this->Html->script('jqGrid-3.4.3/jquery'); ?>
@@ -15,7 +15,7 @@
 <?php echo $this->Html->script('jqGrid-3.4.3/all'); ?>
 
 <?php 
-echo $this->Form->create(false, array('action' => 'index/' . $billing_id));	
+echo $this->Form->create(false, array('url' => 'index/' . $billing_id));	
 echo $this->Form->hidden('billing_id'); 
 echo $this->Form->end("Grab Previous Owing From Previous Months Invioces"); 
 ?>

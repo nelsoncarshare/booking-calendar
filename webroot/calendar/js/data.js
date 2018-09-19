@@ -2,9 +2,10 @@ var LOG_LEVEL = 4; //0 = error, 1 = warn, 2 = info, 3 = debug, 4 = trace
 
 function getCalendars()
 {
-	var url = 'http://' + window.location.host + window.location.pathname + '?action=data&calendars=1';
+	var d = new Date();
+	var url = 'http://' + window.location.host + window.location.pathname + '?action=data&calendars=1' + "&t="+d.getTime();
 	if (LOG_LEVEL >= 4) console.log("getCalendars " + url);
-	//alert('http://' + window.location.host + window.location.pathname + 'index.php?action=data&calendars=1')
+	console.log('http://' + window.location.host + window.location.pathname + '?action=data&calendars=1' + "&t="+d.getTime())
 	$.ajax({
 		url: url,
 		type: "GET",

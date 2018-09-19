@@ -5,10 +5,6 @@ class Chartofaccounts extends AppModel
     public $name = 'Chartofaccounts';
     public $displayField = 'account';
 
-		function AddRefNum($a,$r){
-			echo "update phpc_chartofaccounts set refnum = " . str_replace("'", "\\'",$r) . "' where account LIKE '" .  str_replace("'", "\\'",$a) . "'<br>";
-			print_r( $this->query("update phpc_chartofaccounts set refnum = '" . str_replace("'", "\\'",$r) . "' where account LIKE '" .  str_replace("'", "\\'",$a) . "'") );
-		}
 	
 		public $accntFields = Array(
 			Array("t" => "phpc_vehicles", "a" => "acnt_new_code_gas"),
@@ -44,25 +40,22 @@ class Chartofaccounts extends AppModel
 		);
 		
 		function EliminateDuplicates(){
-			// get chart of accounts order by refnum
-			$chartofaccounts = $this->find('all', array("order" => "Chartofaccounts.type, Chartofaccounts.refnum"));
-			//print_r($chartofaccounts);
-			$previousAccount = Array('refnum' => -1);
+			// get chart of accounts order by account
+			$chartofaccounts = $this->find('all', array("order" => "Chartofaccounts.type, Chartofaccounts.account"));
+			$previousAccount = Array('account' => 'abcdefg');
 			foreach($chartofaccounts as $a){
 				$a = $a['Chartofaccounts'];
-				if ($previousAccount['refnum'] == $a['refnum']){
-					echo("previous match " . $a['account'] . " " . $a['refnum'] . "<br>");
+				if ($previousAccount['account'] == $a['account']){
+					echo("previous match " . $a['account'] . " " . $a['id'] . "<br>");
 					//map all accounts to prev
 					foreach($this->accntFields as $b){
 						$query = "update " . $b['t'] . " set " . $b['a'] . "='" . $previousAccount['id'] . "' where " . $b['a'] . "='" . $a['id'] . "';";
 						$this->query($query);
 						echo($query . "<br>");
 					}
-					$this->query( "delete from phpc_chartofaccounts where id=" . $a['id'] );
-					//$this->query("update phpc_vehicles set acnt_new_code_gas='" . $previousAccount['id'] . "' where acnt_new_code_gas='" . $a['id'] . "'");
-					
+					$this->query( "delete from phpc_chartofaccounts where id=" . $a['id'] );					
 				} else {
-					echo("no match " . $a['account'] . " " . $a['refnum'] . "<br>");
+					//echo("no match " . $a['account'] . " " . $a['id'] . "<br>");
 					$previousAccount = $a;
 				}
 			}

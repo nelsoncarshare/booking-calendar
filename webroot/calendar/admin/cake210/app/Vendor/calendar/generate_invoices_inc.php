@@ -378,6 +378,8 @@ function get_km_rate($plan, $rateLow, $rateMed, $rateHigh){
 		return $rateMed;
 	} else if ($plan == $MEMBER_PLANS['HIGH']) {
 		return $rateHigh;
+	} else if ($plan == $MEMBER_PLANS['GROUP']){
+		return $rateLow;
 	} else {
 		soft_error("Unknown member plan " . $plan);
 	}

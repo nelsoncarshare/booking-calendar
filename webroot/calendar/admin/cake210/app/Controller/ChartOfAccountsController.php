@@ -46,12 +46,12 @@ class ChartofaccountsController extends AppController {
 				$line = explode("\t", $lines[$i]);
 				if (Count($line) > 1){
 					if ($line[0] == "ACCNT"){
-						$newAccounts[] = Array('account' => $line[1], 'type' => 2, 'refnum' => intval($line[2]) );
+						$newAccounts[] = Array('account' => $line[1], 'type' => 2);
 						//$newAccountsAcnt[] = $line[1];
 					}
 					
 					if ($line[0] == "CUST"){
-						$newAccounts[] = Array('account' => $line[1], 'type' => 1, 'refnum' => intval($line[2]) );
+						$newAccounts[] = Array('account' => $line[1], 'type' => 1);
 						//$newAccountsCust[] = $line[1];
 					}
 				}
@@ -66,7 +66,7 @@ class ChartofaccountsController extends AppController {
 		if (Count($errors) > 0){
 			//echo "There were errors " . $errors[0];
 		} else {
-			$chartOfAccounts = $this->Chartofaccounts->find('all', Array('fields' => Array('Chartofaccounts.account', 'Chartofaccounts.type', 'Chartofaccounts.refnum')));
+			$chartOfAccounts = $this->Chartofaccounts->find('all', Array('fields' => Array('Chartofaccounts.account', 'Chartofaccounts.type')));
 			
 			//print_r($chartOfAccounts);
 			
@@ -95,14 +95,8 @@ class ChartofaccountsController extends AppController {
 				$this->Chartofaccounts->Create();
 				$this->Chartofaccounts->Set(Array('account' => $accountsOnlyInNew[$i]['account'], 
 												  'type' => $accountsOnlyInNew[$i]['type'],
-												  'refnum' => $accountsOnlyInNew[$i]['refnum']));
+												  'refnum' => 1));
 				$this->Chartofaccounts->Save();
-			}
-			
-			for($i=0; $i < Count($accountsInBoth); $i++){
-				$data = $this->Chartofaccounts->Find('first',Array('conditions' => Array('Chartofaccounts.refnum' => $accountsInBoth[$i]['refnum'], 'Chartofaccounts.type' => $accountsInBoth[$i]['type'])));
-				$data['Chartofaccounts']['account'] = $accountsInBoth[$i]['account'];
-				$this->Chartofaccounts->Save($data);
 			}
 		}
 		
@@ -114,7 +108,7 @@ class ChartofaccountsController extends AppController {
 	
 	function is_in_array($consider, $Accounts){
 		foreach($Accounts as $acnt){
-			if (intval($acnt['refnum']) == intval($consider['refnum']) && 
+			if ($acnt['account'] == $consider['account'] && 
 				intval($acnt['type']) == intval($consider['type'])){
 					return true;
 			} 
@@ -126,54 +120,5 @@ class ChartofaccountsController extends AppController {
 	function add3(){
 		$this->Chartofaccounts->EliminateDuplicates();
 	}
-	
-	//-----------------------------
-	// Adds ref number to database
-	function add2(){
-		$lines = Array();
-		$file_handle = fopen($this->request->data['File']['image']['tmp_name'], "r");
-		while (!feof($file_handle)) {
-		   $lines[] = fgets($file_handle);
-		}
-		fclose($file_handle);
-		
-		$newAccounts = Array();
-		$accnt2RefnumMap = Array();
-		$errors = Array();
-		if (Count($lines) < 4) {
-			$errors[] = "No accounts in chart of accounts";
-		} else if (strncmp($lines[0], "!HDR", strlen("!HDR")) ||
-			strncmp($lines[1], "HDR", strlen("HDR")) ||
-			strncmp($lines[2], "!ACCNT", strlen("!ACCNT"))){
-			$errors[] = "This doesn't look like a valid chart of accounts file ";
-		} else {
-			for ($i = 3; $i < Count($lines); $i++){
-				$line = explode("\t", $lines[$i]);
-				if (Count($line) > 1){
-					if ($line[0] == "ACCNT"){
-						$newAccounts[] = Array('account' => $line[1], 'refnum' => $line[2]);
-						$accnt2RefnumMap[$line[1]] = $line[2];
-					}
-					
-					if ($line[0] == "CUST"){
-						$newAccounts[] = Array('account' => $line[1], 'refnum' => $line[2]);
-						$accnt2RefnumMap[$line[1]] = $line[2];
-					}
-				}
-			}
-		}
-		
-		if (Count($errors) == 0){
-			for($i=0; $i < Count($newAccounts); $i++){
-				$this->Chartofaccounts->AddRefNum($newAccounts[$i]['account'],$newAccounts[$i]['refnum']);
-			}
-		}
-		
-		$this->Set("accountsOnlyInDB", $accountsOnlyInDB);
-		$this->Set("accountsInBoth", $accountsInBoth);
-		$this->Set("accountsOnlyInNew", $accountsOnlyInNew);
-		$this->Set("errors", $errors);
-	}
-
 }
 ?>

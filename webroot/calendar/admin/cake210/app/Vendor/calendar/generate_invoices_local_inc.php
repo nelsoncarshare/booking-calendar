@@ -302,14 +302,21 @@ class GenerateInvoicesLocal{
 		$invoicableRow = $result->FetchRow();
 		
 		if ($invoicableRow['type'] == 'INDIVIDUAL' || $invoicableRow['force_user_member_plan'] == true){
-			$query = "SELECT * from ".SQL_PREFIX."users WHERE ".SQL_PREFIX."users.id=" . $invoicableRow['user_id'];
-			$result = $db->Execute($query)
-				or db_error(_('Error in get_plan'), $query);
-			$userRow = $result->FetchRow();
-			if ($userRow['is_member'] == TRUE){
-				return $MEMBER_PLANS['LOW'];
-			} else {
-				return $MEMBER_PLANS['HIGH'];
+			if ($invoicableRow['type'] == 'INDIVIDUAL'){
+				// Users could be a member or a casual member
+				$query = "SELECT * from ".SQL_PREFIX."users WHERE ".SQL_PREFIX."users.id=" . $invoicableRow['user_id'];
+				$result = $db->Execute($query)
+					or db_error(_('Error in get_plan'), $query);
+				$userRow = $result->FetchRow();
+				if ($userRow['is_member'] == TRUE){
+					return $MEMBER_PLANS['LOW'];
+				} else {
+					return $MEMBER_PLANS['HIGH'];
+				}				
+			}
+			else {
+				// All groups must be members
+				return $MEMBER_PLANS['LOW'];				
 			}
 		} else {
 			return $MEMBER_PLANS['GROUP'];
