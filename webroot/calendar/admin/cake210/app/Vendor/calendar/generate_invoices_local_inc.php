@@ -367,8 +367,20 @@ class GenerateInvoicesLocal{
 				echo "eeff " . $value['hour_rate'];
 				echo "gghh " . $value['hours_item_name'];
 				*/
-				$outIff .= "SPL\t$spl\t$invType\t" . $this->lookupInChartOfAccounts($chartofaccounts,$value['acnt_new_code_hours'], 'acnt_new_code_hours', $outErrors) . "\t\t-" . number_format($value['time_charge'],2, ".", "") . "\t" . $value['comment'] . "\t-" . $value['hours'] . "\t" . $value['hour_rate'] . "\t" . $value['hours_item_name'] . "\n";
-				$outIff .= "SPL\t" . ($spl + 1) . "\t$invType\t" . $this->lookupInChartOfAccounts($chartofaccounts,$value['acnt_new_name_km'], 'acnt_new_name_km', $outErrors)   .  "\t\t-" . number_format($value['km_charge'],2, ".", "") .   "\t" . $value['comment'] . "\t-" . $value['distance'] . "\t" . $value['km_rate'] . "\t" . $value['km_item_name'] . "\n";    	
+				$outIff .= "SPL\t$spl\t$invType\t" . 
+						$this->lookupInChartOfAccounts($chartofaccounts,$value['acnt_new_code_hours'], 'acnt_new_code_hours', $outErrors) . //ACCNT
+						"\t\t-" . number_format($value['time_charge'],2, ".", "") . //AMNT
+						"\t" . $value['comment'] . //MEMO
+						"\t1" . //QNTY
+						"\t" . $value['hour_rate'] . //PRICE
+						"\t" . $value['hours_item_name'] . "\n"; //INVITEM
+				$outIff .= "SPL\t" . ($spl + 1) . "\t$invType\t" . 
+						$this->lookupInChartOfAccounts($chartofaccounts,$value['acnt_new_name_km'], 'acnt_new_name_km', $outErrors)   .  
+						"\t\t-" . number_format($value['km_charge'],2, ".", "") .   
+						"\t" . $value['comment'] . 
+						"\t-" . $value['distance'] . 
+						"\t" . $value['km_rate'] . 
+						"\t" . $value['km_item_name'] . "\n";    	
 				$spl += 2;
 			}
 		}
@@ -461,9 +473,13 @@ class GenerateInvoicesLocal{
 			$highRateCharge = $highDays * $dailyRateHigh;
 			$lowRateCharge = $lowDays * $dailyRateLow;
 			//$timeCharge = 0;
-			return array( "charge" => round($highRateCharge + $lowRateCharge, 2), "highSlots" => 0, "lowSlots" => 0,
-							"highSlotsFromCancel" => 0, "lowSlotsFromCancel" => 0,
-							"highDays" => $highDays, "lowDays" => $lowDays);
+			return array( "charge" => round($highRateCharge + $lowRateCharge, 2),
+						"highSlots" => 0,
+						"lowSlots" => 0,
+						"highSlotsFromCancel" => 0, 
+						"lowSlotsFromCancel" => 0,
+						"highDays" => $highDays, 
+						"lowDays" => $lowDays);
 			//return round($highRateCharge + $lowRateCharge, 2);
 		} else {
 			$CUTOFF = $hours_cutoff * 4.0; //number of quarter hours until cutoff
@@ -494,7 +510,8 @@ class GenerateInvoicesLocal{
 							"lowSlots" => $lowSlotsEvnt,
 							"highSlotsFromCancel" => $highSlotsCancelMod,
 							"lowSlotsFromCancel" => $lowSlotsCancelMod,
-							"highDays" => 0, "lowDays" => 0);
+							"highDays" => 0, 
+							"lowDays" => 0);
 		}
 	} 	
 	
@@ -744,13 +761,27 @@ class GenerateInvoicesLocal{
 			//$numNightSlots += $numExtraQuarterHoursFromCancelAndMod['night'];
 			$myState = "";
 			if ($row['admin_ignore_this_booking'] == 1){
-				$timeCharge = array( "charge" => 0, "highSlots" => 0, "lowSlots" => 0 , "highSlotsFromCancel" => 0, "lowSlotsFromCancel" => 0, "highDays" => 0, "lowDays" => 0);
+				$timeCharge = array( 
+					"charge" => 0, 
+					"highSlots" => 0, 
+					"lowSlots" => 0 , 
+					"highSlotsFromCancel" => 0, 
+					"lowSlotsFromCancel" => 0, 
+					"highDays" => 0, 
+					"lowDays" => 0);
 				$kmCharge = 0;
 				$kmRate = 0;
 				$myState .= " TRIP DISCOUNTED " . $row['admin_comment'];
 				
 			} else if ($row['admin_ignore_km_hours'] == 1){
-				$timeCharge = array( "charge" => 0, "highSlots" => 0, "lowSlots" => 0 , "highSlotsFromCancel" => 0, "lowSlotsFromCancel" => 0, "highDays" => 0, "lowDays" => 0);
+				$timeCharge = array( 
+					"charge" => 0, 
+					"highSlots" => 0, 
+					"lowSlots" => 0 , 
+					"highSlotsFromCancel" => 0, 
+					"lowSlotsFromCancel" => 0, 
+					"highDays" => 0, 
+					"lowDays" => 0);
 				$kmCharge = 0;
 				$kmRate = 0;
 				$myState .= " HOURS & KM DISCOUNTED " . $row['admin_comment'];			 
