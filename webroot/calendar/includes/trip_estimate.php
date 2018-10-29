@@ -84,10 +84,11 @@ function trip_estimate_submit(){
                 or db_error("error getting billing", $query);
     $billing = $result->FetchRow();    
 
-    $plan = $MEMBER_PLANS['HIGH'];    
+    $plan = $MEMBER_PLANS['LOW'];    
 
 	$subtotals = Array();
-	initializeSubtotals($subtotals);
+	$invoiceGenerator = new GenerateInvoicesLocal();
+	$invoiceGenerator->initializeSubtotals($subtotals);
 	
 	$query= "select * from ".SQL_PREFIX."bookables where id=" . $bookable;
 	$result = $db->Execute($query)
@@ -121,7 +122,7 @@ function trip_estimate_submit(){
         );
 
 	set_bookable_row_values($row, $bookableRow);
-    $invRow = getBookingInvoiceRow($num_km_estimate, $billing, $row, $plan, $subtotals);
+    $invRow = $invoiceGenerator->getBookingInvoiceRow($num_km_estimate, $billing, $row, $plan, $subtotals);
 	$invRow['name'] = $row['name'];
     $outArray = Array('error' => false, 'out' => $invRow);
 	
@@ -136,7 +137,7 @@ function trip_estimate_submit(){
     $bookableRow = $result->FetchRow();
 	if ($bookableRow){
 		set_bookable_row_values($row, $bookableRow);
-		$invRow = getBookingInvoiceRow($num_km_estimate, $billing, $row, $plan, $subtotals);
+		$invRow = $invoiceGenerator->getBookingInvoiceRow($num_km_estimate, $billing, $row, $plan, $subtotals);
 		$invRow['name'] = $bookableRow['name'];
 		$outArray['outEconomy'] = $invRow;
 	}
@@ -153,7 +154,7 @@ function trip_estimate_submit(){
     $bookableRow = $result->FetchRow();
 	if ($bookableRow){
 		set_bookable_row_values($row, $bookableRow);
-		$invRow = getBookingInvoiceRow($num_km_estimate, $billing, $row, $plan, $subtotals);
+		$invRow = $invoiceGenerator->getBookingInvoiceRow($num_km_estimate, $billing, $row, $plan, $subtotals);
 		$invRow['name'] = $bookableRow['name'];
 		$outArray['outMedium'] = $invRow;
 	}
@@ -169,7 +170,7 @@ function trip_estimate_submit(){
     $bookableRow = $result->FetchRow();
 	if ($bookableRow){
 		set_bookable_row_values($row, $bookableRow);
-		$invRow = getBookingInvoiceRow($num_km_estimate, $billing, $row, $plan, $subtotals);
+		$invRow = $invoiceGenerator->getBookingInvoiceRow($num_km_estimate, $billing, $row, $plan, $subtotals);
 		$invRow['name'] = $bookableRow['name'];
 		$outArray['outLarge'] = $invRow;
 	}
