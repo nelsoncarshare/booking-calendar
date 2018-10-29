@@ -109,12 +109,12 @@ class LocationsController extends AppController {
 				echo("vehicle number was not set for this vehicle");
 				exit();
 			}
-			
-			
+
 			if ( $op == "ADMIN_SET_LOC" ){
-				$row = $this->Location->find(Array("id=$vid"));
+				$row = $this->Location->find('first', Array('conditions' => array("Location.id" => $vid)));
 				$row['Location']['GPS_coord_x'] = $lt;
 				$row['Location']['GPS_coord_y'] = $lg;
+				
 				$this->Location->save($row);
 				echo("Saved new location.");
 			} else {
