@@ -20,7 +20,7 @@ class PreviewinvoiceController extends AppController{
         $this->checkSession();	
 	}
 	
-	function index() {
+	function index($debugDump = false) {
 		global $vars;
 
 		if (isset($this->request->data)){
@@ -32,7 +32,7 @@ class PreviewinvoiceController extends AppController{
 		$this->set('invoice_report',tag("div"));
 		
 		if (isset($this->request->data['submit']) ){
-			$this->set('invoice_report',user_preview_invoice_rpt());
+			$this->set('invoice_report',user_preview_invoice_rpt($debugDump));
 		}
 	}
   

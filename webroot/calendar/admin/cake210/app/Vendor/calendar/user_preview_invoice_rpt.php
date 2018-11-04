@@ -4,10 +4,9 @@ if ( !defined('IN_PHPC') ) {
        die("Hacking attempt");
 }
 
-function user_preview_invoice_rpt(){
+function user_preview_invoice_rpt($debugDump){
  	
 	global $vars;
-	
 	$query_month = $vars['month'];
 	$query_year  = $vars['year'];
 	
@@ -36,7 +35,7 @@ function user_preview_invoice_rpt(){
 	
 	$invErrors = Array();
 	$invoiceGenerator = new GenerateInvoicesLocal();
-	$outData = $invoiceGenerator->generate_invoice_for_user_or_group($query_month,$query_year,$invoicableid, 1, $invoiceNumber, $previousOwing, $paymentMade, $billing, "", $errors);
+	$outData = $invoiceGenerator->generate_invoice_for_user_or_group($query_month,$query_year,$invoicableid, 1, $invoiceNumber, $previousOwing, $paymentMade, $billing, "", $debugDump, $errors);
 	
 	$outStr = $invoiceGenerator->skin_invoice_html($outData, $invErrors);
 

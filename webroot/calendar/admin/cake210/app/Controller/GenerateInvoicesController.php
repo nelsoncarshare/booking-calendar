@@ -139,7 +139,7 @@ class GenerateinvoicesController extends AppController{
 		
 		
 		$invoiceGenerator = new GenerateInvoicesLocal();
-		$outData = $invoiceGenerator->generate_invoice_for_user_or_group($month, $year, $invoicable_id, $transId, $invoiceNumber, $previousOwing, $paymentsMade, $billing, $invMemo, $invErrors);
+		$outData = $invoiceGenerator->generate_invoice_for_user_or_group($month, $year, $invoicable_id, $transId, $invoiceNumber, $previousOwing, $paymentsMade, $billing, $invMemo, false, $invErrors);
 		$invText = $invoiceGenerator->skin_invoice_html($outData, $invErrors);
 		$invIff	 = $invoiceGenerator->skin_invoice_iif($outData, $invErrors);
 		

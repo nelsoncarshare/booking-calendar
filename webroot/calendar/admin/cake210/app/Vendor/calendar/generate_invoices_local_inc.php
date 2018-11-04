@@ -23,7 +23,7 @@ class GenerateInvoicesLocal{
 		return $r;
 	}
 
-	function generate_invoice_for_user_or_group($query_month, $query_year, $invoicable_id, $transID, $invoiceNumber, $previousOwing, $paymentsMade, $billing, $invoiceMemoText, &$outErrors){
+	function generate_invoice_for_user_or_group($query_month, $query_year, $invoicable_id, $transID, $invoiceNumber, $previousOwing, $paymentsMade, $billing, $invoiceMemoText, $debugDumpRawData, &$outErrors){
 		global $db, $CANCELED, $MEMBER_PLANS, $TAX_CODES, $vars, $LIGHT_ROW_COLOR, $DARK_ROW_COLOR;
 
 		$startstamp = mktime( 0,   0, 0, $query_month,     1, $query_year);
@@ -56,7 +56,6 @@ class GenerateInvoicesLocal{
 		$this->initializeSubtotals($subtotals);
 			
 		$result = get_user_car_month_usage($startstamp,$endstamp,$invoicable_id);
-		
 		while($row = $result->FetchRow($result)) {
 			$eventsRows[] = $this->getBookingInvoiceRow($totalDistance, $billing, $row, $plan, $subtotals);
 			
@@ -95,6 +94,10 @@ class GenerateInvoicesLocal{
 				}			
 			}	
 		}	
+		
+		if ($debugDumpRawData){
+			print_r($eventsRows);
+		}
 		
 		$outData['events_rows'] = $eventsRows;
 		
@@ -374,13 +377,14 @@ class GenerateInvoicesLocal{
 						"\t1" . //QNTY
 						"\t" . $value['hour_rate'] . //PRICE
 						"\t" . $value['hours_item_name'] . "\n"; //INVITEM
+						
 				$outIff .= "SPL\t" . ($spl + 1) . "\t$invType\t" . 
 						$this->lookupInChartOfAccounts($chartofaccounts,$value['acnt_new_name_km'], 'acnt_new_name_km', $outErrors)   .  
-						"\t\t-" . number_format($value['km_charge'],2, ".", "") .   
-						"\t" . $value['comment'] . 
-						"\t-" . $value['distance'] . 
-						"\t" . $value['km_rate'] . 
-						"\t" . $value['km_item_name'] . "\n";    	
+						"\t\t-" . number_format($value['km_charge'],2, ".", "") .   //AMNT  
+						"\t" . $value['comment'] .  //MEMO
+						"\t" . $value['distance'] . //QNTY
+						"\t" . $value['km_rate'] .  //PRICE
+						"\t" . $value['km_item_name'] . "\n";    	 //INVITEM
 				$spl += 2;
 			}
 		}
@@ -688,7 +692,7 @@ class GenerateInvoicesLocal{
 					//echo ( $end_parse['mday'] . " " . $start_parse['mday'] . " ");
 					$numDays += ceil((mktime(0, 0, 0, $end_parse['mon'], $end_parse['mday'], $end_parse['year']) - mktime(0, 0, 0, $start_parse['mon'], $start_parse['mday'], $start_parse['year'])) / 86400);
 					//echo("'" . $numDays . "'<br/><br/>");
-					$numDays += 1; //number of days that tax applies to.
+					$numDays = max(1,$numDays); //number of days that tax applies to.
 				}
 			}	
 		}
@@ -850,6 +854,9 @@ class GenerateInvoicesLocal{
 				$userDisplayName = "";
 			}
 			
+
+			$numHoursPVRT = ($endstamp - $startstamp)/(60 * 60);			
+			
 			$event_note  = $userDisplayName . " " . $event_note;
 
 			$out = Array( 		   "displayname" => $userDisplayName,
@@ -870,7 +877,8 @@ class GenerateInvoicesLocal{
 								   "admin_ignore_this_booking" => $row['admin_ignore_this_booking'],
 								   "admin_ignore_km_hours" => $row['admin_ignore_km_hours'],
 								   "charge_bc_rental_tax" => $row['charge_bc_rental_tax'],
-								   "name" => "");
+								   "name" => "",
+								   "numHoursPVRT" => $numHoursPVRT);
 			return $out;	
 	}
 
