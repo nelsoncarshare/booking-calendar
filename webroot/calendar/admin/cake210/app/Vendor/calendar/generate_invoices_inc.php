@@ -64,7 +64,7 @@ function get_invoicable_info($invoicable_id){
     return $result->FetchRow($result);
 }
 
-function get_invoicable_users_and_groups(){
+function get_invoicable_users_and_groups($fullVersion = false){
 	global $db;
 	
 	$query= "SELECT ".SQL_PREFIX."invoicables.id ".
@@ -72,6 +72,7 @@ function get_invoicable_users_and_groups(){
 	             ", ".SQL_PREFIX."invoicables.group_id ".
 	             ", ".SQL_PREFIX."grouptypes.type as type".
 	             ", ".SQL_PREFIX."users.displayname ".
+				 ", ".SQL_PREFIX."users.is_member ".
 	             ", ".SQL_PREFIX."users.disabled ".
 	             ", ".SQL_PREFIX."groups.grp_displayname ".
 	             ", ".SQL_PREFIX."groups.disabled as grp_disabled ".
@@ -81,7 +82,7 @@ function get_invoicable_users_and_groups(){
 	         "INNER JOIN ".SQL_PREFIX."grouptypes on ".SQL_PREFIX."invoicables.type=".SQL_PREFIX."grouptypes.id ".
 	         "WHERE ((".SQL_PREFIX."grouptypes.type='INDIVIDUAL' and ".SQL_PREFIX."users.disabled=0 and ".SQL_PREFIX."users.group_id=1) ".
 	         "OR (".SQL_PREFIX."grouptypes.type<>'INDIVIDUAL' and ".SQL_PREFIX."groups.disabled=0 and ".SQL_PREFIX."groups.id<>1))".
-	         "ORDER BY type, displayname, grp_displayname ";
+	         "ORDER BY type, is_member, displayname, grp_displayname ";
 
 	//echo($query);
 	$result = $db->Execute($query)
@@ -91,10 +92,25 @@ function get_invoicable_users_and_groups(){
 	if ($row1 = $result->FetchRow()) {
 		for (; $row1; $row1 = $result->FetchRow()) {
 			if ($row1['type'] == 'INDIVIDUAL'){
-				$users[$row1['id']] = $row1['displayname'];	
+				if ($fullVersion){
+					$users[$row1['id']] = array (
+						"name" => $row1['displayname'],
+						"isMember" => $row1['is_member']
+						);
+				} else {
+					$users[$row1['id']] = $row1['displayname'];
+				}
 			} else {
-				$users[$row1['id']] = $row1['grp_displayname'];
-			}		
+				if ($fullVersion){
+					
+					$users[$row1['id']] = array(
+						"name" => $row1['grp_displayname'],
+						"isMember" =>  $row1['is_member']
+					);
+				} else {
+					$users[$row1['id']] = $row1['grp_displayname'];
+				}
+			}
 		}
 	}	
 	
@@ -312,6 +328,7 @@ function update_invoice($invid, $fieldName, $value){
 }
 
 function get_prev_owing($invoicable_id, $billing_id){
+	global $db;
 	//get the year month from the current billing
 	$year = quick_query("select year from " . SQL_PREFIX . "billings where id=".$billing_id, "year");
 	$month = quick_query("select month from " . SQL_PREFIX . "billings where id=".$billing_id, "month");
@@ -328,10 +345,26 @@ function get_prev_owing($invoicable_id, $billing_id){
 	} else {
 		$prev_owing = quick_query("select amt_owing from " . SQL_PREFIX . "invoices where invoicable_id=".$invoicable_id." and billing_id=".$old_billing_id, "amt_owing");
 	}
-	if ($prev_owing == ""){
+	
+	$query = "SELECT is_member, " . SQL_PREFIX . "invoicables.type FROM " . SQL_PREFIX . "invoicables LEFT OUTER JOIN " . SQL_PREFIX . "users ON phpc_users.id = " . SQL_PREFIX . "invoicables.user_id WHERE " . SQL_PREFIX . "invoicables.id = '" . $invoicable_id . "'";
+	$result = $db->Execute($query)
+                or db_error("error get_invoicables", $query);
+
+	if ( $row = $result->FetchRow() ){
+		$is_member = $row['is_member'];
+		$type = $row['type'];
+	}
+	
+	if ($is_member == 1 || $type == 2) 
+	{
+		if ($prev_owing == ""){
+			return 0.0;
+		} else {
+			return $prev_owing;
+		}
+	} else 
+	{
 		return 0.0;
-	} else {
-		return $prev_owing;
 	}
 }
 

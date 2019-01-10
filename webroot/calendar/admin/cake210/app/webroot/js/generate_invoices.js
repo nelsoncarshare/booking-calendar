@@ -29,6 +29,49 @@ jQuery(document).ready(function(){
             idx: ""
             };
 
+	ncal.admin.geninv._checkNextCasualUser = function(){
+                    var i = ncal.admin.checkCasualUsers.idx;
+                    ncal.admin.checkCasualUsers.idx++;
+                    if (i >= ncal.admin.checkCasualUsers.list_of_ids.length){
+                        jQuery('#progressMessage').html("Done");
+                        return;
+                    }
+                    invoicable_id = ncal.admin.checkCasualUsers.list_of_ids[i];
+                    jQuery('#progressMessage').html("Checking casual user " + (i + 1) + " of " + ncal.admin.checkCasualUsers.list_of_ids.length);
+                    jQuery.ajax({
+                      dataType:'json',
+                      url: CAKE_ROOT + 'generateinvoices/check_casual_user/' + invoicable_id + 
+                                                                                             '/' + ncal.admin.geninv.year + 
+                                                                                             '/' + ncal.admin.geninv.month,
+                      success: function(data) {
+                        var invoicable_id = data.invoicable_id;
+                        if (data.success){
+							
+                            jQuery("div#invoicable_message_" + invoicable_id).html(data.message).addClass("successClass");
+							if (data.foundBooking == "true"){
+								jQuery("input#" + invoicable_id).attr('checked','checked');
+							}
+                        } else {
+                            var errorStr = data.message + '<br/>';
+                            for (i = 0; i < data.errors.length; i++){
+                                item = data.errors[i];
+                                errorStr += "&nbsp;&nbsp;&nbsp;"+ item + "<br/>";
+                            }
+                            jQuery("div#invoicable_message_" + invoicable_id).html(errorStr).addClass("errorClass");
+                        }
+                        ncal.admin.geninv._checkNextCasualUser();
+                      },
+                      error: function(data) {
+						var message = "Error checking casual user.";
+						if (!data.success){
+							message += data.message;
+						}
+                        jQuery("div#invoicable_message_" + invoicable_id).html(message).addClass("error");
+                        ncal.admin.geninv._checkNextCasualUser();
+                      }
+                    });
+	};
+	
     ncal.admin.geninv._generateNextInvoice = function(){
                     var i = ncal.admin.geninv.idx;
                     ncal.admin.geninv.idx++;
@@ -76,6 +119,21 @@ jQuery(document).ready(function(){
                     });    
     };   
     
+	ncal.admin.geninv.checkCasualUsersThatUsedThisMonth = function(){
+        var year = jQuery("input[name='year']").val();
+        var month = jQuery("input[name='month']").val();
+        ncal.admin.geninv.year = year;
+        ncal.admin.geninv.month = month;
+		ncal.admin.checkCasualUsers = new Object();
+        ncal.admin.checkCasualUsers.list_of_ids = [];
+        ncal.admin.checkCasualUsers.idx = 0;
+		jQuery("input[type='checkbox'][isMember='0']").each(function(i){
+			invoiceable_id = this.id
+			ncal.admin.checkCasualUsers.list_of_ids.push(invoiceable_id);
+		});
+		ncal.admin.geninv._checkNextCasualUser();
+	};
+	
     ncal.admin.geninv.generateInvoicesForSlected = function(validating){
         var year = jQuery("input[name='year']").val();
         var month = jQuery("input[name='month']").val();
@@ -191,6 +249,11 @@ jQuery(document).ready(function(){
     jQuery("a[name='validate_invoices']").click(function(){
         ncal.admin.geninv.generateInvoicesForSlected(true); 
     });    
+	
+	jQuery("a[name='check_casual_users_used_this_month']").click(function(){
+        ncal.admin.geninv.checkCasualUsersThatUsedThisMonth(); 
+    });    
+	
     jQuery("a[name='gen_invoices']").click(function(){
         ncal.admin.geninv.generateInvoicesForSlected(false);
     });

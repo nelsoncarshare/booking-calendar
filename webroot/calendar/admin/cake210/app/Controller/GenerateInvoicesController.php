@@ -92,7 +92,36 @@ class GenerateinvoicesController extends AppController{
 		    $out = Array("success" => $success, "message"=>$message);
 		    $this->set("myArr", json_encode($out)  );			
 	}
+	 
+	function check_casual_user($invoicable_id, $year=1901, $month=-1)
+	{
+		$this->layout = "json";
 		
+		$startstamp = mktime( 0,   0, 0, $month,     1, $year);
+		$endstamp =   mktime(23, 59, 59, $month + 1, 0, $year);
+		
+		$outData = array();
+		$result = get_user_car_month_usage($startstamp,$endstamp,$invoicable_id);
+		
+		$foundBooking = "false";
+		if ($result->FetchRow())
+		{
+			$foundBooking = "true";
+		}
+		
+		$invErrors = Array();
+		if (count($invErrors) == 0){
+		    $message = "Successfully checked user for bookings found booking='" . $foundBooking . "'";
+		    $success = true;   
+		} else {
+		    $message = "Failed to create invoice for this user";
+		    $success = false;   		    
+		}
+		
+		$out = Array("success" => $success, "message"=>$message, "invoicable_id" => $invoicable_id, "foundBooking" => $foundBooking, "errors" => $invErrors);
+		$this->set("myArr", json_encode($out)  );
+	}
+	
 	function geninvoice($invoicable_id, $year=1901, $month=-1, $newInvoiceNumber=-1, $transId=-1, $validating='true'){               
 	    $this->layout = "json";	
 
@@ -185,8 +214,7 @@ class GenerateinvoicesController extends AppController{
 	
     function inv_list(){
 		global $vars;
-
-        $invoicables = get_invoicable_users_and_groups();
+        $invoicables = get_invoicable_users_and_groups(true);
         $this->set("invoicables", $invoicables);     
     }
 	/*
