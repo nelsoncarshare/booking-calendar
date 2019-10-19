@@ -435,13 +435,18 @@ function get_events_for_month_ajax($month, $year, $cal_name, $view_old)
 function get_vehicle_locations_ajax($cal_name)
 {
 	global $db;
-	$query = "select ".SQL_PREFIX."bookables.name as description, GPS_coord_x as lat, GPS_coord_y as lng, imagefile as icon from ".
+	$query = "select ".SQL_PREFIX."bookables.name as description, ".SQL_PREFIX."locations.id as id, GPS_coord_x as lat, GPS_coord_y as lng, imagefile as icon from ".
 		SQL_PREFIX."bookables inner join ".SQL_PREFIX."locations on ".SQL_PREFIX."bookables.location_id=".
 		SQL_PREFIX."locations.id inner join ".SQL_PREFIX."vehicles on ".SQL_PREFIX."bookables.vehicle_id=".SQL_PREFIX."vehicles.id left outer join ".
 		SQL_PREFIX."vehicletypes on ".SQL_PREFIX."vehicletypes.id=".SQL_PREFIX."vehicles.vehicle_type inner join ".
 		SQL_PREFIX."bookables_calendars on ".SQL_PREFIX."bookables_calendars.bookable_id=".SQL_PREFIX."bookables.id inner join ".
 		SQL_PREFIX."calendars on ".SQL_PREFIX."bookables_calendars.calendar_id=".SQL_PREFIX."calendars.id ".
-		" where disabled='0' and calendar=".$cal_name;
+		" where disabled='0'";
+	
+	if ($cal_name != "-1")
+	{
+		$query .= " and calendar=".$cal_name;
+	}
 	
 	$result = $db->Execute($query)
 		or db_error(_('Error in get_locations'), $query);

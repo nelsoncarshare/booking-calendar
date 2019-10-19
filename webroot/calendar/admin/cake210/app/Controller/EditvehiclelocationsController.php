@@ -1,4 +1,5 @@
 <?php
+
 App::uses('AppController', 'Controller');
 
 require_once(APP . 'Vendor' . DS . 'adodb/adodb.inc.php');
@@ -20,12 +21,13 @@ class EditvehiclelocationsController extends AppController{
 	
 	function index() {
 		global $vars;
+		global $GOOGLE_MAPS_API_KEY;
 		
 		if (isset($this->request->data)){
 			$vars = $this->request->data;
 		}
-		//print_r($this);
-		//$this->set('edit_locations',edit_vehicle_locations($this->html));
+		
+		$this->set('GOOGLE_MAPS_API_KEY', $GOOGLE_MAPS_API_KEY['carsharecoop.ca'] );
 		
 		//$this->set('invoice_report',tag("div"));
 		
